@@ -1,0 +1,16 @@
+Here, I'll present my Factory System.
+'Kay.
+
+What about an polymorphic Factory System ?
+Difficulty : Easy.
+Need a Base class.
+And we can instanciate other Derived class from Base.
+Problem : We need to instanciate a lot of instances of the Factory System, and it may cost a lot.
+
+What about an "all" Factory System ?
+Difficulty : Insane.
+You can instanciate all types.
+A type safety weaker.
+Problem : Type retrieving
+
+Currently, we have an all Factory System, which works quite well after some tests.

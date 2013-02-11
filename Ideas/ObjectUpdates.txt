@@ -1,0 +1,12 @@
+**under construction**
+
+See: Map.hpp
+<pckt header> // See: Shared/WorldPacket.hpp
+<guid> // uint64
+<field num> // uint8
+<field> <data> // uint8 | template<class T>
+<guid> // uint64...
+...
+
+Remember to update packet size on updates! Destroy packet after passing 
+it to all sessions!

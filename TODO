@@ -1,0 +1,14 @@
+OzVessalius (Fullmetal-Alchimist):
+- Drop boost:: where we can use std::
+- MyAnimeList account (KazutoKirito)
+- Make it compile (optional, lol)
+- Tab2space, remove trailing whitespaces
+- see issue #2
+- Make it compile: This is YOUR job!
+
+
+Krofna:
+- Pathfinding: decrease_key is optional: simply make OpenList of of "lighter" nodes, i.e. vector2<uint16> + cost for heap maintenance
+- Database: loading and saving the world
+- Login ecryption using RSA (Crypto++)
+- Get the basic map/objects working

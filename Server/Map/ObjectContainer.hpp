@@ -26,6 +26,8 @@ public:
     ObjectContainer() : ObjectUpdateGUID(static_cast<uint64>(-1)) { }
 
     template <class T> void ObjectUpdateField(uint8 Field, T Data);
+
+    virtual void SendUpdate(WorldSession* pSession);
 private:
     uint64 ObjectUpdateGUID;
     WorldPacket ObjectUpdatePckt;
@@ -42,6 +44,11 @@ void ObjectContainer::ObjectUpdateField<T>(uint64 GUID, uint8 Field, T Data)
     uint8* FieldNumPtr = ObjectUpdatePckt.GetDataWithoutHeader() + ObjectUpdatePckt.GetSizeWithoutHeader() - sizeof(uint8);
     (*FieldNumPtr)++;
     ObjectUpdatePckt << Field << Data;
+}
+
+void ObjectContainer::SendUpdate(WorldSession* pSession)
+{
+    pSession->Send(ObjectUpdatePckt);
 }
 
 

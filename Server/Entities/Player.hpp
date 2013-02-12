@@ -30,21 +30,28 @@ public:
     virtual void Update(uint32 diff);
 
     // TODO : Fix these functions. Placeholders.
-    uint8 GetSecLevel() {}
+    uint8 GetSecLevel() { return 0; }
     void Kill() { }
     void SendCommandReponse(std::string const& Message) { }
     void Teleport(Map* pMap, Vector2<uint16> const& pos) { }
     void Teleport(Map* pMap, uint16 x, uint16 y) { }
     bool IsInWorld() const { return true; }
     void LogOut() { }
+    
+    // This will all pending packets to client
+    void SendUpdate();
 
 protected:
     Player(uint32 Entry);
     Player(QueryResult& Result);
 
 private:
+    WorldSession* pSession;
+    Bag* pBackpack;
 };
 
+// TODO: This can't be here because of Object.hpp
+// FIXME RYAN
 template<>
 class ObjectHolder<Player>
 {

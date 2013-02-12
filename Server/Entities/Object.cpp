@@ -42,7 +42,7 @@ Vector2<uint16> Object::GetPosition() const
     return Pos;
 }
 
-Grid<Object>* Object::GetContainer()
+ObjectContainer* Object::GetContainer()
 {
     return pContainer;
 }
@@ -50,6 +50,6 @@ Grid<Object>* Object::GetContainer()
 void Object::Relocate(Vector2<uint16>& Where)
 {
     Pos = Where;
-    pContainer->AppendObjectUpdate(FIELD_POS_X, Pos.x);
-    pContainer->AppendObjectUpdate(FIELD_POS_Y, Pos.y);
+    pContainer->AppendObjectUpdate(GUID, FIELD_POS_X, Pos.x);
+    pContainer->AppendObjectUpdate(GUID, FIELD_POS_Y, Pos.y);
 }

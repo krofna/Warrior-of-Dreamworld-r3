@@ -29,3 +29,9 @@ void Player::Create(uint32 Entry)
 void Player::Update(uint32 diff)
 {
 }
+
+void Player::SendUpdate()
+{
+    pContainer->SendUpdate(pSession);
+    pBackpack->SendUpdate(pSession);
+}

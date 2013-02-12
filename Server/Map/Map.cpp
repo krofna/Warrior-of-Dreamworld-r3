@@ -20,6 +20,7 @@
 
 Map::Map()
 {
+    PacketsForPlayers.reserve(10); // Not sure if 10 is a good magic number
 }
 
 void Map::Update(uint32 diff)
@@ -28,4 +29,11 @@ void Map::Update(uint32 diff)
 
 void Map::SendToPlayers(WorldPacket& Data)
 {
+    PacketsForPlayers.push_back(Data);
+}
+
+void Map::SendUpdate(WorldSession* pSession)
+{
+    ObjectContainer::SendUpdate(pSession);
+    std::for_each(PacketsForPlayers.begin(), PacketsForPlayers.end(), boost::bind(&WorldSession::Send, pSession, _1));
 }

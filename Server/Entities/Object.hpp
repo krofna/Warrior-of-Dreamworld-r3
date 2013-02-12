@@ -19,7 +19,7 @@
 #define OBJECT_HPP
 
 #include "Shared/Vector2.hpp"
-#include "Shared/Grid.hpp"
+#include "ObjectContainer.hpp"
 #include "Shared/Templates.hpp"
 #include "Shared/ObjectHolder.hpp"
 #include "Database.hpp"
@@ -79,7 +79,7 @@ public:
     std::string GetName() const;
     uint64 GetGUID() const;
     Vector2<uint16> GetPosition() const;
-    Grid<Object>* GetContainer();
+    ObjectContainer* GetContainer();
 
     void Relocate(Vector2<uint16>& Where);
 
@@ -90,7 +90,7 @@ protected:
     uint8 ObjectMask;
     uint64 GUID;
     std::string Name;
-    Grid<Object>* pContainer;
+    ObjectContainer* pContainer;
     ObjectTemplate* pTemplate;
     Vector2<uint16> Pos;
 };

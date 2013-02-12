@@ -1,0 +1,2 @@
+Player will have a pointer to 1 "bag", which will be container for X
+(for example 4) equipable bags.

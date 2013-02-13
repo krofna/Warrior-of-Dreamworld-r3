@@ -1,0 +1,3 @@
+Why dont we make ObjectMgr::Get*****Template a template function, so
+we can call it from GenericObjectFactory like ObjectMgr::GetTemplate<T>?
+Also rewrite objectmgr to store <T> templates nicely.

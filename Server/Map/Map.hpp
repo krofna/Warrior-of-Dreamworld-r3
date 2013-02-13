@@ -30,13 +30,12 @@ public:
     virtual void Update(uint32 diff);
     
     // Enqueues packet which is to be sent to players in map
-    // TODO: Rename?
-    void SendToPlayers(WorldPacket& Data);
+    void EnqueuePlayerUpdate(WorldPacket& Data);
     
     // Actually sends packets to pSession
     virtual void SendUpdate(WorldSession* pSession);
 protected:
-    // Packets enqueued by SendToPlayers and sent in SendUpdate
+    // Packets enqueued by EnqueuePlayerUpdate and sent in SendUpdate
     std::vector<WorldPacket> PacketsForPlayers;
 };
 

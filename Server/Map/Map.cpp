@@ -27,7 +27,7 @@ void Map::Update(uint32 diff)
 {
 }
 
-void Map::SendToPlayers(WorldPacket& Data)
+void Map::EnqueuePlayerUpdate(WorldPacket& Data)
 {
     PacketsForPlayers.push_back(Data);
 }

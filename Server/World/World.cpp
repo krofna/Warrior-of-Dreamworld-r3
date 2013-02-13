@@ -145,14 +145,13 @@ void World::ConsoleInput()
 void World::Update(uint32 diff)
 {
     // Update all updateable objects
-    // TODO: Should any specific order be maintained?
     ObjectHolder<Item>::Execute(boost::bind(&Item::Update, _1, diff));
-    ObjectHolder<Creature>::Execute(boost::bind(&Creature::Update, _1, diff));
-    ObjectHolder<Player>::Execute(boost::bind(&Player::Update, _1, diff));
+    ObjectHolder<Map>::Execute(boost::bind(&Map::Update, _1, diff));
     ObjectHolder<GameObject>::Execute(boost::bind(&GameObject::Update, _1, diff));
     ObjectHolder<Pet>::Execute(boost::bind(&Pet::Update, _1, diff));
+    ObjectHolder<Creature>::Execute(boost::bind(&Creature::Update, _1, diff));
     ObjectHolder<Vehicle>::Execute(boost::bind(&Vehicle::Update, _1, diff));
-    ObjectHolder<Map>::Execute(boost::bind(&Map::Update, _1, diff));
+    ObjectHolder<Player>::Execute(boost::bind(&Player::Update, _1, diff));
     
     // Actually send update to clients
     ObjectHolder<Player>::Execute(boost::bind(&Player::SendUpdate, _1));

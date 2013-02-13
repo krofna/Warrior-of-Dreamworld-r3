@@ -1,2 +1,2 @@
-Player will have a pointer to 1 "bag", which will be container for X
-(for example 4) equipable bags.
+Player will have a pointer to Inventory, which will be container for X
+(for example 4) equipable bags. It MUST inherit from ObjectContainer

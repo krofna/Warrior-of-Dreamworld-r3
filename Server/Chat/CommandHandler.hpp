@@ -100,7 +100,7 @@ void CommandHandler::ExtractArg(T& Arg)
     }
     catch (boost::bad_lexical_cast& e)
     {
-        sLog.Write(LEVEL_ERROR, LOG_COMMANDS, e.what());
+        sLog.Write(LEVEL_ERROR, FILTER_COMMANDS, e.what());
         throw BadCommand();
     }
 }

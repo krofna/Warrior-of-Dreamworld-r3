@@ -19,6 +19,8 @@
 #define OBJECT_CONTAINER_HPP
 
 #include "Shared/Grid.hpp"
+#include "Object.hpp"
+#include "WorldSession.hpp"
 
 class ObjectContainer : public Grid<Object>
 {

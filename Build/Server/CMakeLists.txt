@@ -19,6 +19,7 @@ ${CMAKE_SOURCE_DIR}/../Server/Database
 ${CMAKE_SOURCE_DIR}/../Server
 ${CMAKE_SOURCE_DIR}/../Server/Chat
 ${CMAKE_SOURCE_DIR}/../Server/Global
+${CMAKE_SOURCE_DIR}/../Server/Session
 ${Boost_INCLUDE_DIRS}
 ${MYSQLCONNECTORCPP_INCLUDE_DIR}
 )

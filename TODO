@@ -12,3 +12,6 @@ Krofna:
 - Database: loading and saving the world
 - Login ecryption using RSA (Crypto++)
 - Get the basic map/objects working
+
+Anyone:
+- ObjectContainer includes Object, Object includes Object container...

@@ -18,7 +18,7 @@
 #ifndef MAIN_HPP
 #define MAIN_HPP
 
-#include "Singleton.hpp"
+#include "Shared/Singleton.hpp"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread/thread.hpp>
@@ -29,6 +29,8 @@ using namespace boost::posix_time;
 
 class Main : public Singleton<Main>
 {
+    friend class Singleton;
+    World() = default;
 public:
     Main();
     ~Main();

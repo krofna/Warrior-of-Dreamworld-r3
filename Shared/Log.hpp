@@ -45,7 +45,7 @@ enum LogType
 class Log : public Configurable
 {
 public:
-    Log(std::string FileName);
+    Log(/*std::string FileName*/); // Evil. Fix me.
     void LoadFromConfig(std::ifstream& Config);
     
     template<typename... Values> void Write(uint8 Level, uint8 Filter, std::string const& String, Values... Vals);

@@ -27,7 +27,7 @@ class ObjectContainer;
 
 enum TypeMask
 {
-    TYPE_OBJECT            = 0,
+    TYPE_OBJECT         = 0,
     TYPE_WORLD_OBJECT   = TYPE_OBJECT       | 1,
     TYPE_VEHICLE        = TYPE_WORLD_OBJECT | 2,
     TYPE_GAME_OBJECT    = TYPE_WORLD_OBJECT | 4,

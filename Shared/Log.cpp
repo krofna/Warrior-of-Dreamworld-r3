@@ -19,8 +19,8 @@
 
 Log sLog;
 
-Log::Log(std::string FileName) :
-File    (FileName)
+Log::Log(/*std::string FileName*/) :
+File    ("RyanLikesAnime.log")
 {
 }
 
@@ -32,7 +32,7 @@ void Log::LoadFromConfig(std::ifstream& Config)
 
 void Log::Flush()
 {
-    boost::mutex::scoped_lock Lock(LogMutex);
+    std::lock_guard<std::mutex> Lock(LogMutex);
     std::cout << std::flush;
     File << std::flush;
 }

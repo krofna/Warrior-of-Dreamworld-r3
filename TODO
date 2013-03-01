@@ -1,7 +1,6 @@
 OzVessalius (Fullmetal-Alchimist):
 - Drop boost:: where we can use std::
 - MyAnimeList account (KazutoKirito)
-- Make it compile (optional, lol)
 - Tab2space, remove trailing whitespaces
 - see issue #2
 - Make it compile: This is YOUR job!

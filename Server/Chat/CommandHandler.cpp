@@ -16,8 +16,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "CommandHandler.hpp"
+#include "Map.hpp"
 #include "Database.hpp"
 #include "Player.hpp"
+#include "PlayerHolder.hpp"
 #include "ObjectAccessor.hpp"
 
 #define NullCommand { nullptr, 0, false, nullptr, "", nullptr }
@@ -248,7 +250,7 @@ void CommandHandler::HandleTeleportAtCommand()
     ExtractArg(x);
     ExtractArg(y);
     ExtractArg(MapGUID);
-    pPlayer->Teleport(ObjectAccessor::FindMap(MapGUID), x, y);
+    pPlayer->Teleport(ObjectAccessor::GetInstance()->FindMap(MapGUID), x, y);
 }
 
 void CommandHandler::HandleBringCommand()
@@ -283,7 +285,7 @@ void CommandHandler::HandleShutdownCommand()
 
 void CommandHandler::HandleGpsCommand()
 {
-    pPlayer->SendCommandReponse(Format("Map GUID: %llu, X: %u, Y: %u", ((Map*)pPlayer->GetContainer())->GetGUID(), pPlayer->GetPosition.x, pPlayer->GetPosition.y));
+    pPlayer->SendCommandReponse(Format("Map GUID: %llu, X: %u, Y: %u", (static_cast<Map*>(pPlayer->GetContainer())->GetGUID(), pPlayer->GetPosition().x, pPlayer->GetPosition().y)));
 }
 
 void CommandHandler::HandleHelpCommand()

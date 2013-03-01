@@ -34,9 +34,13 @@ public:
     
     // Actually sends packets to pSession
     virtual void SendUpdate(WorldSession* pSession);
+
+    // TODO: ??
+    uint64 GetGUID() { return m_GUID; }
 protected:
     // Packets enqueued by EnqueuePlayerUpdate and sent in SendUpdate
     std::vector<WorldPacket> PacketsForPlayers;
+    uint64 m_GUID;
 };
 
 #endif

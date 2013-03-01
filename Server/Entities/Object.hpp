@@ -19,10 +19,11 @@
 #define OBJECT_HPP
 
 #include "Shared/Vector2.hpp"
-#include "ObjectContainer.hpp"
 #include "Shared/Templates.hpp"
 #include "Shared/ObjectHolder.hpp"
 #include "Database.hpp"
+
+class ObjectContainer;
 
 enum TypeMask
 {

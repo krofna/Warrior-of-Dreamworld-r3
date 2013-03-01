@@ -27,7 +27,7 @@ class ObjectContainer : public Grid<Object>
 public:
     ObjectContainer() : ObjectUpdateGUID(static_cast<uint64>(-1)) { }
 
-    template <class T> void ObjectUpdateField(uint8 Field, T Data);
+    template <class T> void ObjectUpdateField(uint64 GUID, uint8 Field, T Data);
 
     virtual void SendUpdate(WorldSession* pSession);
 private:
@@ -36,12 +36,12 @@ private:
 };
 
 template <class T>
-void ObjectContainer::ObjectUpdateField<T>(uint64 GUID, uint8 Field, T Data)
+void ObjectContainer::ObjectUpdateField(uint64 GUID, uint8 Field, T Data)
 {
     if (ObjectUpdateGUID != GUID)
     {
         ObjectUpdateGUID = GUID;
-        WorldPacket << GUID << uint8(0);
+        ObjectUpdatePckt << GUID << uint8(0);
     }
     uint8* FieldNumPtr = ObjectUpdatePckt.GetDataWithoutHeader() + ObjectUpdatePckt.GetSizeWithoutHeader() - sizeof(uint8);
     (*FieldNumPtr)++;

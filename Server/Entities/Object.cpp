@@ -17,6 +17,7 @@
 */
 #include "Object.hpp"
 #include "ObjectAccessor.hpp"
+#include "ObjectContainer.hpp"
 
 Object::Object(QueryResult& Result)
 {

@@ -22,13 +22,14 @@
 #include "ObjectMgr.hpp"
 
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/enable_shared_from_this.hpp>
 #include <queue>
 
 class Player;
 
 typedef boost::asio::ip::tcp::socket TCPSocket;
 
-class WorldSession : public enable_shared_from_this<WorldSession>
+class WorldSession : public boost::enable_shared_from_this<WorldSession>
 {
     friend class WorldAcceptor;
 public:

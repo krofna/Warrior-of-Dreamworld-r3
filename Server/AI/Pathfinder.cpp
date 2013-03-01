@@ -100,7 +100,7 @@ void Pathfinder::GeneratePath()
 {
     std::stack<Vector2<uint16> >* pPath = new std::stack<Vector2<uint16> >;
 
-    Grid<Object>* pGrid = pWork->pMe->GetContainer();
+    Grid<Object>* pGrid = dynamic_cast<Grid<Object>* >(pWork->pMe->GetContainer());
 
     for (uint16 y = 0; y < MAX_MAP_HEIGHT; ++y)
         for (uint16 x = 0; x < MAX_MAP_WIDTH; ++x)

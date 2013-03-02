@@ -16,10 +16,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "World.hpp"
-#include "Shared/ObjectMgr.hpp"
+#include "ObjectMgr.hpp"
 #include "Database.hpp"
-#include "scripts/ScriptLoader.hpp"
-#include "Log.hpp"
+#include "Scripts/ScriptLoader.hpp"
+#include "Shared/Log.hpp"
 #include "CommandHandler.hpp"
 #include "Map.hpp"
 

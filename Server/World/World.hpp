@@ -18,9 +18,9 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
-#include "Factory.hpp"
+#include "Shared/Factory.hpp"
 #include "Object.hpp"
-#include "Singleton.hpp"
+#include "Shared/Singleton.hpp"
 
 #include <boost/unordered_set.hpp>
 

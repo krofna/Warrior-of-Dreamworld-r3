@@ -18,6 +18,7 @@
 #include "Pathfinder.hpp"
 #include "MotionMaster.hpp"
 #include "Unit.hpp"
+#include "ObjectContainer.hpp"
 #include "Shared/Log.hpp"
 
 #include <stack>

@@ -3,6 +3,7 @@
 
 #include "Player.hpp"
 #include "Shared/ObjectHolder.hpp"
+#include "ObjectContainer.hpp"
 
 template<>
 class ObjectHolder<Player>

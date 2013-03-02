@@ -16,12 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "World.hpp"
+
 #include "ObjectMgr.hpp"
 #include "Database.hpp"
-#include "Scripts/ScriptLoader.hpp"
-#include "Shared/Log.hpp"
-#include "CommandHandler.hpp"
+#include "ObjectAccessor.hpp"
+
+#include "Creature.hpp"
+#include "Player.hpp"
+#include "Item.hpp"
+#include "GameObject.hpp"
+#include "Pet.hpp"
+#include "Vehicle.hpp"
 #include "Map.hpp"
+#include "Bag.hpp"
+
+#include "CreatureAI.hpp"
+#include "GameObjectAI.hpp"
+
+#include "Pathfinder.hpp"
+#include "Scripts/ScriptLoader.hpp"
+
+#include "Shared/Log.hpp"
+
+#include "CommandHandler.hpp"
 
 #include <boost/bind.hpp>
 
@@ -66,37 +83,37 @@ void World::Load()
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Static factories registered.");
     
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Loading creature templates...");
-        sObjectMgr.LoadCreatureTemplates();
+        ObjectMgr::GetInstance()->LoadCreatureTemplates();
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Creature templates loaded.");
         
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Loading creature quests...");
-        sObjectMgr.LoadCreatureQuests();
+        ObjectMgr::GetInstance()->LoadCreatureQuests();
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Creature quests loaded.");
 
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Loading spell templates...");
-        sObjectMgr.LoadSpellTemplates();
+        ObjectMgr::GetInstance()->LoadSpellTemplates();
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Spells loaded.");
         
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Loading gameobject templates...");
-        sObjectMgr.LoadGameObjectTemplates();
+        ObjectMgr::GetInstance()->LoadGameObjectTemplates();
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Gameobject templates loaded.");
         
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Loading map templates...");
-        sObjectMgr.LoadMapTemplates();
+        ObjectMgr::GetInstance()->LoadMapTemplates();
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Map templates loaded.");
 
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Loading scripts...");
         LoadScripts();
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Scripts loaded.");
 
-        sLog.Write("Initializing pathfinder...");
+        sLog.Write(FILTER_LOADING, LEVEL_INFO, "Initializing pathfinder...");
         Pathfinder::Initialize();
-        sLog.Write("Pathfinder initialized.");
+        sLog.Write(FILTER_LOADING, LEVEL_INFO, "Pathfinder initialized.");
 
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Loading maps...");
-        QueryResult Result(WorldDatabase.Query("SELECT * FROM `map`"));
+        QueryResult Result = std::move(WorldDatabase->Query("SELECT * FROM `map`"));
         while (Result->next())
-            Factory::Load <Map> ("Map", Result);
+            Map* p_Map = Factory::Load <Map> ("Map", Result); // What do you want to do with p_Map ?
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Maps loaded.");
     }
     catch (sql::SQLException& e)
@@ -111,7 +128,7 @@ void World::Load()
     }
 }
 
-void World::ConsoleInput()
+void World::CLI()
 {
     std::string Input;
 

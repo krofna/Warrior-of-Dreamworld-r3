@@ -20,6 +20,7 @@
 
 #include "Shared/ObjectHolder.hpp"
 #include "Shared/Singleton.hpp"
+#include "PlayerHolder.hpp"
 
 class Player;
 class Creature;

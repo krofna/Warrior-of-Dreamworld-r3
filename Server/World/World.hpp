@@ -29,7 +29,6 @@ class Map;
 class World : public Singleton<World>
 {
     friend class Singleton;
-    World() = default;
 public:
     World();
     ~World();

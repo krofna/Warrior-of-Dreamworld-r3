@@ -35,9 +35,12 @@ public:
     }
 
     template <class F>
-    void Execute(F Function)
+    static void Execute(F Function)
     {
-        std::for_each(PlayerMap.begin(), PlayerMap.end(), Function);
+        for (auto Iter = PlayerMap.begin() ; Iter != PlayerMap.end() ; ++Iter)
+        {
+            Function((*Iter).second);
+        }
     }
 private:
     ObjectHolder() { }

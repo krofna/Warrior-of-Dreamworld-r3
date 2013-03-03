@@ -113,7 +113,7 @@ void World::Load()
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Loading maps...");
         QueryResult Result = std::move(WorldDatabase->Query("SELECT * FROM `map`"));
         while (Result->next())
-            Map* p_Map = Factory::Load <Map> ("Map", Result); // What do you want to do with p_Map ?
+            Map* p_Map = Factory::Load <Map> ("Map", std::move(Result)); // What do you want to do with p_Map ?
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Maps loaded.");
     }
     catch (sql::SQLException& e)

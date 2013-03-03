@@ -32,9 +32,12 @@ public:
     static T* Find(uint64 GUID);
     
     template <class F>
-    void Execute(F Function)
+    static void Execute(F Function)
     {
-        std::for_each(ObjectMap.begin(), ObjectMap.end(), Function);
+        for (auto Iter = ObjectMap.begin() ; Iter != ObjectMap.end() ; ++Iter)
+        {
+            Function((*Iter).second);
+        }
     }
 
 private:

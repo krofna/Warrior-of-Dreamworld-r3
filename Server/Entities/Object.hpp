@@ -66,7 +66,8 @@ class GenericObjectFactory
     }
 };
 
-#define DEFINE_GENERIC_OBJECT_FACTORY(X) struct Factory : public GenericObjectFactory<X> \
+#define DEFINE_GENERIC_OBJECT_FACTORY(X) public: \
+                                         struct Factory : public GenericObjectFactory<X> \
                                          { };
 
 class Object

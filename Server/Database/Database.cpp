@@ -43,7 +43,7 @@ void Database::Execute(const char* Sql)
 QueryResult Database::Query(const char* Sql)
 {
     PStatement.reset(Connection->prepareStatement(Sql));
-    return QueryResult(PStatement->executeQuery());
+    return std::move(QueryResult(PStatement->executeQuery()));
 }
 
 uint64 Database::GenerateGUID()

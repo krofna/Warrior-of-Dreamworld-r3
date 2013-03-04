@@ -18,8 +18,7 @@
 #include "Unit.hpp"
 #include "MotionMaster.hpp"
 
-Unit::Unit   (QueryResult& Result) :
-WorldObject  (Result),
+Unit::Unit   () :
 pMotionMaster(new MotionMaster(this))
 {
 }

@@ -25,17 +25,18 @@ class MotionMaster;
 class Unit : public WorldObject
 {
 public:
-    ~Unit();
+    virtual ~Unit();
 
     virtual void Update(uint32 diff);
     
-    Unit* GetVictim();
+    Unit* GetVictim() const { return pVictim; }
 
 protected:
-    Unit(QueryResult& Result);
+    Unit();
     virtual void Create(uint32 Entry) = 0;
     
     MotionMaster* pMotionMaster;
+    Unit* pVictim;
 };
 
 #endif

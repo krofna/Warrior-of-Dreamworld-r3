@@ -59,8 +59,9 @@ class GenericObjectFactory
 
     T* Load(QueryResult& Result)
     {
-        T* pObject = new T(Result);
-        pObject->Create(Result->getUInt(2));
+        T* pObject = new T;
+        pObject->PreCreate(Result);
+        pObject->Create(Result);
         ObjectHolder<T>::Insert(pObject);
         return pObject;
     }
@@ -74,7 +75,7 @@ class Object
 {
     DEFINE_GENERIC_OBJECT_FACTORY(Object)
 public:
-    virtual ~Object() = 0;
+    virtual ~Object();
 
     virtual void Update(uint32 diff);
 
@@ -86,8 +87,9 @@ public:
     void Relocate(Vector2<uint16>& Where);
 
 protected:
-    Object(QueryResult& Result);
+    virtual void PreCreate(QueryResult& Result);
     virtual void Create(uint32 Entry) = 0;
+    virtual void Create(QueryResult& Result) = 0;
 
     uint8 ObjectMask;
     uint64 GUID;

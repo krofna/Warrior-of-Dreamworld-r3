@@ -137,7 +137,7 @@ void CommandHandler::HandleAccountCreateCommand()
     ExtractArg(Username);
     ExtractArg(Password);
 
-    CharactersDatabase->PExecute("INSERT INTO `players` VALUES (%llu, '%s', '%s', 'none', 0, 0, 'dg_classm32.gif', 0, 0, 0, 0, 0)", Database::GenerateGUID(), Username.c_str(), Password.c_str());
+    CharactersDB->PExecute("INSERT INTO `players` VALUES (%llu, '%s', '%s', 'none', 0, 0, 'dg_classm32.gif', 0, 0, 0, 0, 0)", Database::GenerateGUID(), Username.c_str(), Password.c_str());
     if (Console)
         sLog.Write(LEVEL_INFO, LOG_CONSOLE, "Account %s successfully created.", Username.c_str());
     else
@@ -160,7 +160,7 @@ void CommandHandler::HandleAccountDeleteCommand()
     if (pPlayer->IsInWorld())
         pPlayer->LogOut();
 
-    CharactersDatabase->PExecute("DELETE FROM `players` WHERE `username` = '%s'", Username.c_str());
+    CharactersDB->PExecute("DELETE FROM `players` WHERE `username` = '%s'", Username.c_str());
 }
 
 void CommandHandler::HandleAccountSetSecLevelCommand()
@@ -174,7 +174,7 @@ void CommandHandler::HandleAccountSetSecLevelCommand()
     if (SecLevel > SEC_ADMIN || SecLevel < SEC_PLAYER)
         throw BadCommand();
 
-    CharactersDatabase->PExecute("UPDATE `players` SET `seclevel` = %u WHERE `username` = '%s'", SecLevel, Username.c_str());
+    CharactersDB->PExecute("UPDATE `players` SET `seclevel` = %u WHERE `username` = '%s'", SecLevel, Username.c_str());
 }
 
 void CommandHandler::HandleAccountSetPasswordCommand()
@@ -189,7 +189,7 @@ void CommandHandler::HandleAccountSetPasswordCommand()
 
     ExtractArg(Password);
 
-    CharactersDatabase->PExecute("UPDATE `players` SET `password` = '%s' WHERE `username` = '%s'", Password.c_str(), Username.c_str());
+    CharactersDB->PExecute("UPDATE `players` SET `password` = '%s' WHERE `username` = '%s'", Password.c_str(), Username.c_str());
 }
 
 void CommandHandler::HandleKillCommand()

@@ -17,9 +17,6 @@
 */
 #include "Database.hpp"
 
-Database* WorldDatabase;
-Database* CharactersDatabase;
-
 Database::Database() : Driver(get_driver_instance())
 {
 }
@@ -48,7 +45,31 @@ QueryResult Database::Query(const char* Sql)
 
 uint64 Database::GenerateGUID()
 {
-    QueryResult result = WorldDatabase->Query("SELECT UUID_SHORT();");
+    QueryResult result = DatabaseFactory::GetInstance()->Get()->Query("SELECT UUID_SHORT();");
     result->next();
     return result->getUInt64(1);
+}
+
+bool DatabaseFactory::CreateDatabase(std::string const& Name, std::ifstream& Config)
+{
+    m_Databases[Name] = std::make_shared<Database>();
+    m_Databases[Name]->LoadFromConfig(Config);
+    
+    return true; // TODO: Test if the connection have been made.
+}
+
+void DatabaseFactory::RemoveDatabase(std::string const& Name)
+{
+    m_Databases.erase(Name);
+}
+
+std::shared_ptr<Database> DatabaseFactory::Get(std::string const& Name) const
+{
+    auto Iter = m_Databases.find(Name);
+    return Iter == m_Databases.end() ? nullptr : (*Iter).second;
+}
+
+std::shared_ptr<Database> DatabaseFactory::Get() const
+{
+    return (*(m_Databases.begin())).second; // TODO: Check if there is element in the map.
 }

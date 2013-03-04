@@ -17,6 +17,8 @@
 */
 #ifndef SINGLETON_HPP
 #define SINGLETON_HPP
+#include <functional>
+#include <memory>
 
 template <class Class>
 class Singleton
@@ -24,25 +26,16 @@ class Singleton
 public:
     static Class* GetInstance()
     {
-        return sInstance;
+        return sInstance.get();
     }
 
     template <typename... Args>
-    static void CreateInstance(Args const && ... args)
+    static void CreateInstance(Args &&... args)
     {
         if (sInstance != nullptr)
             return;
 
-        sInstance = new Class(std::forward<Args>(args)...);
-    }
-
-    static void DestroyInstance()
-    {
-        if (sInstance)
-        {
-            delete sInstance;
-            sInstance = nullptr;
-        }
+        sInstance.reset(new Class(std::forward<Args>(args)...));
     }
 
 protected:
@@ -55,10 +48,10 @@ protected:
     ~Singleton() = default;
 
 private:
-    static Class* sInstance;
+    static std::unique_ptr<Class> sInstance;
 };
 
 template <class Class>
-Class* Singleton<Class>::sInstance = nullptr;
+std::unique_ptr<Class> Singleton<Class>::sInstance;
 
 #endif

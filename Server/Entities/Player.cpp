@@ -16,22 +16,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "Player.hpp"
+#include "ObjectContainer.hpp"
 
-Player::Player(QueryResult& Result) : Unit(Result)
+Player::Player()
 {
 }
 
-void Player::Create(uint32 Entry)
-{
-    pTemplate = ObjectMgr::GetInstance()->GetPlayerTemplate(Entry);
-}
 
 void Player::Update(uint32 diff)
 {
+    // ...
 }
 
 void Player::SendUpdate()
 {
     pContainer->SendUpdate(pSession);
-    pBackpack->SendUpdate(pSession);
 }

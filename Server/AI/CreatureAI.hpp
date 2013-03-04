@@ -26,6 +26,9 @@ class Creature;
 class CreatureAI : public AI<Creature>
 {
 public:
+    struct Factory
+    {};
+public:
     explicit CreatureAI(Creature* pCreature);
     virtual ~CreatureAI();
 

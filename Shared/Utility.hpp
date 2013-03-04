@@ -50,11 +50,35 @@ inline std::string ToString(T What)
     return boost::lexical_cast<std::string>(What);
 }
 
+template<class T>
+inline T ToType(std::string const& String)
+{
+    return boost::lexical_cast<T>(String);
+}
+
+inline std::pair<std::string, std::string> SplitPair(std::string const& Value, char Separator)
+{
+    std::pair<std::string, std::string> Pair;
+
+    int idxSeparator = Value.find(Separator);
+    if (idxSeparator == std::string::npos)
+        throw std::runtime_error("Failed to split pair, idxSeparator is at npos.");
+
+    Pair.first.resize(idxSeparator + 1);
+    Pair.second.resize(Value.size() - idxSeparator + 1);
+
+    std::copy(Value.begin(), Value.begin() + idxSeparator, Pair.first.begin());
+    std::copy(Value.begin() + idxSeparator, Value.end(), Pair.second.begin());
+
+    return Pair;
+}
+
 inline int urand(int Min, int Max)
 {
     boost::random::uniform_int_distribution<> Dist(Min, Max);
     return Dist(Generator);
 }
+
 
 inline std::string Format(boost::format& formater)
 {

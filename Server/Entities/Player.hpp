@@ -23,7 +23,6 @@
 
 class Map;
 class WorldSession;
-class Bag;
 
 class Player : public Unit
 {
@@ -34,6 +33,7 @@ public:
     // TODO : Fix these functions. Placeholders.
     uint8 GetSecLevel() { return 0; }
     void Kill() { }
+    void Kick() { } // BOOMO
     void SendCommandReponse(std::string const& Message) { }
     void Teleport(Map* pMap, Vector2<uint16> const& pos) { }
     void Teleport(Map* pMap, uint16 x, uint16 y) { }
@@ -44,12 +44,10 @@ public:
     void SendUpdate();
 
 protected:
-    Player(uint32 Entry);
-    Player(QueryResult& Result);
+    Player();
 
 private:
     WorldSession* pSession;
-    Bag* pBackpack;
 };
 
 

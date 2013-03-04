@@ -96,7 +96,7 @@ void WorldSession::HandleReceive(const boost::system::error_code& Error)
         if (Packet.GetOpcode() == MSG_NULL)
             sLog.Write(LEVEL_WARNING, FILTER_PACKET, "Received a MSG_NULL, strange...");
         else
-            sLog.Write(LEVEL_INFO, FILTER_PACKET, "Received Packet: %s, ", OpcodeTable[Packet.GetOpcode()].name);
+            sLog.Write(LEVEL_INFO, FILTER_PACKET, "Received Packet: %s, ", OpcodeTable[Packet.GetOpcode()].Name);
 
         (this->*OpcodeTable[Packet.GetOpcode()].Handler)();
         Start();
@@ -105,7 +105,7 @@ void WorldSession::HandleReceive(const boost::system::error_code& Error)
 
 void WorldSession::Send(WorldPacket& Packet)
 {
-    sLog.Write(LEVEL_INFO, FILTER_PACKET, "Sending Packet: %s, ", OpcodeTable[Packet.GetOpcode()].name);
+    sLog.Write(LEVEL_INFO, FILTER_PACKET, "Sending Packet: %s, ", OpcodeTable[Packet.GetOpcode()].Name);
 
     Packet.UpdateSizeData();
     MessageQueue.push(Packet);
@@ -124,12 +124,12 @@ void WorldSession::HandleSend(const boost::system::error_code& Error)
         if (pPlayer)
         {
             sLog.Write(LEVEL_ERROR, FILTER_PACKET, "Failed to send packet: %s to player %s", 
-                OpcodeTable[MessageQueue.front().GetOpcode()].name, pPlayer->GetName());
+                OpcodeTable[MessageQueue.front().GetOpcode()].Name, pPlayer->GetName());
         }
         else
         {
             sLog.Write(LEVEL_ERROR, FILTER_PACKET, "Failed to send packet: %s to unknown player", 
-                OpcodeTable[MessageQueue.front().GetOpcode()].name);
+                OpcodeTable[MessageQueue.front().GetOpcode()].Name);
         }
     }
 

@@ -26,13 +26,11 @@ class AI;
 class WorldObject : public Object
 {
 public:
-    ~WorldObject();
+    virtual ~WorldObject();
 
     virtual void Update(uint32 diff);
     
 protected:
-    WorldObject(QueryResult& Result);
-    
     AI<WorldObject>* pAI;
 };
 

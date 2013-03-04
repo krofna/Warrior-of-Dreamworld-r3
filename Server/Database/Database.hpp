@@ -21,6 +21,7 @@
 #include "Shared/BasicTypes.hpp"
 #include "Shared/Configurable.hpp"
 #include "Shared/Utility.hpp"
+#include "Shared/Singleton.hpp"
 
 #include <mysql_connection.h>
 #include <cppconn/driver.h>
@@ -29,6 +30,7 @@
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
 #include <memory>
+#include <unordered_map>
 
 typedef std::unique_ptr<sql::ResultSet> QueryResult;
 typedef std::unique_ptr<sql::Connection> ConnectionPtr;
@@ -66,7 +68,22 @@ template<typename... Values> QueryResult Database::PQuery(std::string const& Sql
     return Query(Format(Sql, Vals...).c_str());
 }
 
-extern Database* WorldDatabase;
-extern Database* CharactersDatabase;
+class DatabaseFactory : public Singleton<DatabaseFactory>
+{
+    friend class Singleton<DatabaseFactory>;
+    DatabaseFactory() = default;
+    public:
+    bool CreateDatabase(std::string const& Name, std::ifstream& Config);
+    void RemoveDatabase(std::string const& Name);
+
+    std::shared_ptr<Database> Get(std::string const& Name) const;
+    std::shared_ptr<Database> Get() const;
+
+    private:
+    std::unordered_map<std::string, std::shared_ptr<Database> > m_Databases;
+};
+
+#define CharactersDB DatabaseFactory::GetInstance()->Get("Characters")
+#define WorldDB DatabaseFactory::GetInstance()->Get("World")
 
 #endif

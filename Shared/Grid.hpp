@@ -28,10 +28,10 @@ template <class T>
 class Grid
 {
 public:
-    T* At(Vector2<uint16>& Pos);
+    T* At(Vector2<uint16> const& Pos);
     T* At(uint16 x, uint16 y);
     void Resize(uint16 x, uint16 y);
-    void Remove(Vector2<uint16>& Pos);
+    void Remove(Vector2<uint16> const& Pos);
     void Insert(T* What);
     Vector2<uint16> GetSize();
     uint16 GetSizeX();
@@ -44,7 +44,7 @@ private:
 };
 
 template <class T>
-T* Grid<T>::At(Vector2<uint16>& Pos)
+T* Grid<T>::At(Vector2<uint16> const& Pos)
 {
     std::lock_guard<std::mutex> Lock(ArrayMutex);
     return Array[Size.y * Pos.y + Pos.x];
@@ -84,7 +84,7 @@ uint16 Grid<T>::GetSizeY()
 }
 
 template <class T>
-void Grid<T>::Remove(Vector2<uint16>& Pos)
+void Grid<T>::Remove(Vector2<uint16> const& Pos)
 {
     Array[Size.y * Pos.y + Pos.x] = nullptr;
 }

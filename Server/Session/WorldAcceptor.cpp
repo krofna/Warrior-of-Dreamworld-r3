@@ -25,14 +25,14 @@
 #include <boost/bind.hpp>
 
 WorldAcceptor::WorldAcceptor(boost::asio::io_service& io) :
-Endpoint                    (boost::asio::ip::tcp::v4(), 0xBEEF),
-Acceptor                    (new TCPAcceptor(io, Endpoint))
+Endpoint                    (boost::asio::ip::tcp::v4(), 0xBEEF) // Port value = 48879
 {
+    Acceptor.reset(new TCPAcceptor(io, Endpoint));
 }
 
 void WorldAcceptor::HandleAccept(const boost::system::error_code& Error)
 {
-    if(!error)
+    if(!Error)
         NewSession->Start();
 
     Accept();
@@ -40,8 +40,8 @@ void WorldAcceptor::HandleAccept(const boost::system::error_code& Error)
 
 void WorldAcceptor::Accept()
 {
-    NewSession = make_shared<WorldSession>(pAcceptor->get_io_service());
-    pAcceptor->async_accept(NewSession->Socket,
+    NewSession = std::make_shared<WorldSession>(Acceptor->get_io_service());
+    Acceptor->async_accept(NewSession->Socket,
         boost::bind(&WorldAcceptor::HandleAccept, this,
         boost::asio::placeholders::error));
 }

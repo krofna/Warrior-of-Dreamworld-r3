@@ -23,18 +23,11 @@
 
 #include "Creature.hpp"
 #include "Player.hpp"
-#include "Item.hpp"
-#include "GameObject.hpp"
-#include "Pet.hpp"
-#include "Vehicle.hpp"
 #include "Map.hpp"
-#include "Bag.hpp"
 
 #include "CreatureAI.hpp"
-#include "GameObjectAI.hpp"
 
 #include "Pathfinder.hpp"
-#include "Scripts/ScriptLoader.hpp"
 
 #include "Shared/Log.hpp"
 
@@ -56,9 +49,7 @@ IsRunning   (true)
 
 World::~World()
 {
-    ObjectMgr::DestroyInstance();
-    ObjectAccessor::DestroyInstance();
-    Pathfinder::DestroyInstance();
+
 }
 
 void World::Load()
@@ -69,16 +60,10 @@ void World::Load()
 
         Factory::Register <Creature>   ("Creature");
         Factory::Register <Player>     ("Player");
-        Factory::Register <Item>       ("Item");
-        Factory::Register <GameObject> ("GameObject");
-        Factory::Register <Pet>        ("Pet");
-        Factory::Register <Vehicle>    ("Vehicle");
 
         Factory::Register <Map>        ("Map");
-        Factory::Register <Bag>        ("Bag");
 
         Factory::Register <CreatureAI>   ("CreatureAI");
-        Factory::Register <GameObjectAI> ("GameObjectAI");
 
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Static factories registered.");
     
@@ -102,16 +87,16 @@ void World::Load()
         ObjectMgr::GetInstance()->LoadMapTemplates();
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Map templates loaded.");
 
-        sLog.Write(FILTER_LOADING, LEVEL_INFO, "Loading scripts...");
-        LoadScripts();
-        sLog.Write(FILTER_LOADING, LEVEL_INFO, "Scripts loaded.");
+//        sLog.Write(FILTER_LOADING, LEVEL_INFO, "Loading scripts...");
+//        LoadScripts();
+//        sLog.Write(FILTER_LOADING, LEVEL_INFO, "Scripts loaded.");
 
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Initializing pathfinder...");
         Pathfinder::Initialize();
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Pathfinder initialized.");
 
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Loading maps...");
-        QueryResult Result = std::move(WorldDatabase->Query("SELECT * FROM `map`"));
+        QueryResult Result = std::move(WorldDB->Query("SELECT * FROM `map`"));
         while (Result->next())
             Map* p_Map = Factory::Load <Map> ("Map", std::move(Result)); // What do you want to do with p_Map ?
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Maps loaded.");
@@ -162,16 +147,21 @@ void World::CLI()
 void World::Update(uint32 diff)
 {
     // Update all updateable objects
-    ObjectHolder<Item>::Execute(boost::bind(&Item::Update, _1, diff));
+//    ObjectHolder<Item>::Execute(boost::bind(&Item::Update, _1, diff));
     ObjectHolder<Map>::Execute(boost::bind(&Map::Update, _1, diff));
-    ObjectHolder<GameObject>::Execute(boost::bind(&GameObject::Update, _1, diff));
-    ObjectHolder<Pet>::Execute(boost::bind(&Pet::Update, _1, diff));
+//    ObjectHolder<GameObject>::Execute(boost::bind(&GameObject::Update, _1, diff));
+//    ObjectHolder<Pet>::Execute(boost::bind(&Pet::Update, _1, diff));
     ObjectHolder<Creature>::Execute(boost::bind(&Creature::Update, _1, diff));
-    ObjectHolder<Vehicle>::Execute(boost::bind(&Vehicle::Update, _1, diff));
+//    ObjectHolder<Vehicle>::Execute(boost::bind(&Vehicle::Update, _1, diff));
     ObjectHolder<Player>::Execute(boost::bind(&Player::Update, _1, diff));
     
     // Actually send update to clients
     ObjectHolder<Player>::Execute(boost::bind(&Player::SendUpdate, _1));
+}
+
+void World::KickAll()
+{
+    // WTF.
 }
 
 bool World::IsStopped()

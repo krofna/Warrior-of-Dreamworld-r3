@@ -20,39 +20,37 @@
 
 #include "Shared/Singleton.hpp"
 
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/thread/thread.hpp>
+#include <boost/asio/deadline_timer.hpp>
+#include <boost/chrono.hpp>
+#include <thread>
+#include <memory>
 #include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/asio.hpp>
-using namespace boost::posix_time;
+
+typedef boost::chrono::milliseconds ms;
 
 class Main : public Singleton<Main>
 {
     friend class Singleton;
-    World() = default;
+    Main(boost::asio::io_service& io);
 public:
-    Main();
     ~Main();
 
     void Load(int argc, char** argv);
     void Run();
-    int GetRetVal();
+    int GetRetVal() const;
 
 private:
     void WorldLoop();
-
-    ptime GetCurrentTime();
-    time_duration GetDiff(ptime& Old, ptime& New);
+    void ProcessOption(std::pair<std::string, std::string> const& opt);
 
     int RetVal;
-    ptime CurrentTime = 0;
-    ptime PreviousTime = GetCurrentTime();
-    ptime PreviousSleepTime = 0;
-    ptime ServerStartTime
-    std::vector<boost::shared_ptr<boost::thread> > Threads;
+    int nThreads;
+
+    std::vector<std::shared_ptr<std::thread> > Threads;
     boost::asio::deadline_timer HeartbeatTimer;
-    boost::asio::io_service io;
+    boost::chrono::high_resolution_clock::time_point OldTime;
+    boost::asio::io_service& io;
 };
 
 #endif

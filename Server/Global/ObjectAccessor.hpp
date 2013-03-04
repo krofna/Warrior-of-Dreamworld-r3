@@ -25,9 +25,6 @@
 class Player;
 class Creature;
 class GameObject;
-class Pet;
-class Vehicle;
-class Item;
 class Map;
 
 class ObjectAccessor : public Singleton<ObjectAccessor>
@@ -37,12 +34,10 @@ class ObjectAccessor : public Singleton<ObjectAccessor>
 public:    
     Player* FindPlayer(uint64 GUID)                 { return FindObjectInWorld<Player>(GUID);       }
     Player* FindPlayer(std::string const& Username) { return ObjectHolder<Player>::Find(Username);  }
+
     Creature* FindCreature(uint64 GUID)             { return FindObjectInWorld<Creature>(GUID);     }
-    GameObject* FindGameObject(uint64 GUID)         { return FindObjectInWorld<GameObject>(GUID);   }
-    Pet* FindPet(uint64 GUID)                       { return FindObjectInWorld<Pet>(GUID);          }
-    Vehicle* FindVehicle(uint64 GUID)               { return FindObjectInWorld<Vehicle>(GUID);      }
-    Item* FindItem(uint64 GUID)                     { return FindObjectInWorld<Item>(GUID);         }
-    Map* FindMap(uint64 GUID)                       { return ObjectHolder<Map>::Find(GUID);         }
+
+    Map* FindMap(uint64 GUID)                       { return FindObjectInWorld<Map>(GUID);         }
 
     template <class T>
     T* FindObjectInWorld(uint64 GUID)               { return ObjectHolder<T>::Find(GUID);           }

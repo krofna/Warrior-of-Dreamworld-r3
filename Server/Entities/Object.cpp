@@ -18,14 +18,11 @@
 #include "Object.hpp"
 #include "ObjectAccessor.hpp"
 #include "ObjectContainer.hpp"
+#include "Map.hpp"
 
-Object::Object(QueryResult& Result)
+Object::~Object()
 {
-    GUID = Result->getUInt64(1);
-    Create(Result->getUint(2));
-    pContainer = ObjectAccessor::GetInstance()->FindMap(Result->getUInt64(3));
-    Pos.x = Result->getUInt(4);
-    Pos.y = Result->getUInt(5);
+
 }
 
 uint64 Object::GetGUID() const
@@ -48,9 +45,22 @@ ObjectContainer* Object::GetContainer()
     return pContainer;
 }
 
+void Object::Update(uint32 diff)
+{
+    // ... ?
+}
+
 void Object::Relocate(Vector2<uint16>& Where)
 {
     Pos = Where;
-    pContainer->AppendObjectUpdate(GUID, FIELD_POS_X, Pos.x);
-    pContainer->AppendObjectUpdate(GUID, FIELD_POS_Y, Pos.y);
+//    pContainer->AppendObjectUpdate(GUID, FIELD_POS_X, Pos.x);
+//    pContainer->AppendObjectUpdate(GUID, FIELD_POS_Y, Pos.y);
+}
+
+void Object::PreCreate(QueryResult& Result)
+{
+    GUID = Result->getUInt64(1);
+    pContainer = ObjectAccessor::GetInstance()->FindMap(Result->getUInt64(3));
+    Pos.x = Result->getUInt(4);
+    Pos.y = Result->getUInt(5);
 }

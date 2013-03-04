@@ -39,26 +39,39 @@ public:
     template <typename Type>
     static void Register(std::string const& TypeId)
     {
-        std::unique_ptr<typename Type::Factory> ptr_Factory(new (typename Type::Factory));
+        typename Type::Factory* ptr_Factory = new (typename Type::Factory);
+
         FactoryRegistry[TypeId] = ptr_Factory;
+    }
+
+    template <typename TypeFactory>
+    static void Delete(std::string const& TypeId)
+    {
+        delete Cast<TypeFactory>(TypeId);
     }
 
     template <typename Type, typename... Tn>
     static Type* Create(std::string const& TypeId, Tn... Parameters)
     {
-        Type* pType = dynamic_cast<Type* >(boost::any_cast<std::unique_ptr<typename Type::Factory>>(FactoryRegistry[TypeId])->Create(std::forward<Tn>(Parameters)...));
+        Type* pType = dynamic_cast<Type* >(Cast<typename Type::Factory>(TypeId)->Create(std::forward<Tn>(Parameters)...));
         if (!pType)
-            throw std::runtime_error("Failed to create an Object from dynamic casting.");
+            throw std::runtime_error("Downcast failed, pType is null.");
         return pType;
     }
 
     template <typename Type, typename... Tn>
     static Type* Load(std::string const& TypeId, Tn... Parameters)
     {
-        Type* pType = dynamic_cast<Type* >(boost::any_cast<std::unique_ptr<typename Type::Factory>>(FactoryRegistry[TypeId])->Load(std::forward<Tn>(Parameters)...));
+        Type* pType = dynamic_cast<Type* >(Cast<typename Type::Factory>(TypeId)->Load(std::forward<Tn>(Parameters)...));
         if (!pType)
-            throw std::runtime_error("Failed to load an Object from dynamic casting.");
+            throw std::runtime_error("Downcast failed, pType is null.");
         return pType;
+    }
+
+    template <typename TypeFactory>
+    static TypeFactory* Cast(std::string const& TypeId)
+    {
+        return boost::any_cast<TypeFactory*>(FactoryRegistry[TypeId]);
     }
     
 private:
@@ -79,6 +92,5 @@ void Load(std::string const& TypeId, Type* p_Type, Tn const && ... Params)
     p_Type = Factory::Load<Type, Tn...>(TypeId, Params...);
 }
 
-std::unordered_map<std::string, boost::any> Factory::FactoryRegistry;
 
 #endif

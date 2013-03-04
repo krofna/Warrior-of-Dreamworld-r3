@@ -17,96 +17,106 @@
 */
 #include "Main.hpp"
 #include "World.hpp"
+#include "WorldAcceptor.hpp"
+#include "Shared/Log.hpp"
 
 #define WORLD_HEARTBEAT 50
 
-Main::Main    () :
-HeartbeatTimer(io)
+Main::Main (boost::asio::io_service& r_io) :
+io(r_io),
+HeartbeatTimer(r_io)
 {
-    ServerStartTime = boost::posix_time::second_clock::local_time();
-
     World::CreateInstance();
-    WorldAcceptor::CreateInstance(io);
+    WorldAcceptor::CreateInstance(r_io);
+    DatabaseFactory::CreateInstance();
 }
 
 Main::~Main()
 {
-    World::DestroyInstance();
-    WorldAcceptor::DestroyInstance();
-}
-
-ptime Main::GetCurrentTime()
-{
-    return boost::posix_time::second_clock::local_time() - ServerStartTime;
-}
-
-time_duration Main::GetDiff(ptime& Old, ptime& New)
-{
-    return New - Old;
 }
 
 void Main::Load(int argc, char** argv)
 {
-    WorldDatabase = new Database;
-    WorldDatabase->LoadFromConfig();
-    CharactersDatabase = new Database;
-    CharacterDatabase->LoadFromConfig();
-    sLog = new Log;
-    sLog.LoadFromConfig();
-    sWorld = new World;
-    sWorld->Load();
-    
+    std::vector<std::string> Arguments(argc - 1);
+    std::copy(argv + 1, argv + argc, Arguments.begin());
+
+    if (Arguments.size() > 0)
+    {
+        for (size_t i = 0 ; i < Arguments.size() ; ++i)
+        {
+            std::pair<std::string, std::string> opt = SplitPair(Arguments[i], '=');
+            ProcessOption(opt);          
+        }
+    }
+
+
+    std::ifstream WorldFile("WorldServer.conf");
+    std::ifstream CharactersFile("CharactersServer.conf");
+    std::ifstream LogFile("LogConfig.conf");
+
+    // Log init
+    sLog.LoadFromConfig(LogFile);
+   
+    // Database init
+    DatabaseFactory::GetInstance()->CreateDatabase("World", WorldFile);
+    DatabaseFactory::GetInstance()->CreateDatabase("Characters", CharactersFile);
+
+    // World init
+    World::GetInstance()->Load();
+
     io.post(boost::bind(&World::CLI,            World::GetInstance()));
     io.post(boost::bind(&Main::Run,             Main::GetInstance()));
-    io.post(boost::bind(&WorldAcceptor::Start,  WorldAcceptor::GetInstance()));
+    io.post(boost::bind(&WorldAcceptor::Accept,  WorldAcceptor::GetInstance()));
 }
 
 void Main::WorldLoop()
 {
-    while (!sWorld.IsStopped())
+    if (World::GetInstance()->IsStopped())
     {
-        CurrentTime = GetCurrentTime();
-        time_duration diff = GetDiff(PreviousTime, CurrentTime);
-        sWorld->Update(diff.total_milliseconds());
-        PreviousTime = CurrentTime;
-
-        if (diff <= WORLD_HEARTBEAT + PreviousSleepTime)
-        {
-            PreviousSleepTime = WORLD_HEARTBEAT + PreviousSleepTime - diff;
-            HeartbeatTimer.expires_at(PreviousSleepTime);
-            HeartbeatTimer.async_wait(boost::bind(&Main::WorldLoop, this));
-            return;
-        }
-        else
-            PreviousSleepTime = 0;
+        World::GetInstance()->KickAll();
+        return;
     }
-    sWorld->KickAll();
+
+    ms DeltaTime = boost::chrono::duration_cast<ms>(boost::chrono::high_resolution_clock::now() - OldTime);
+    World::GetInstance()->Update(DeltaTime.count());
+
+    OldTime += DeltaTime;
+
+    HeartbeatTimer.expires_at(HeartbeatTimer.expires_at() + boost::posix_time::milliseconds(WORLD_HEARTBEAT));
+    HeartbeatTimer.async_wait(boost::bind(&Main::WorldLoop, this));
+}
+
+void Main::ProcessOption(std::pair<std::string, std::string> const& opt)
+{
+    if (opt.first == "--nthread" || opt.first == "-thread")
+        nThreads = ToType<int>(opt.second);
+    else
+       std::cerr << "[LOW-LEVEL - Main::ProcessOptions]: Unknown argument : " << opt.first << std::endl;
 }
 
 void Main::Run()
 {
-    Threads.resize(4, new boost::thread(boost::bind(&boost::asio::io_service::run, &io)))
+    Threads.resize(nThreads, std::make_shared<std::thread>(boost::bind(&boost::asio::io_service::run, &io)));
 
-    CurrentTime = 0;
-    PreviousTime = GetCurrentTime();
-    PreviousSleepTime = 0;
-
+    OldTime = boost::chrono::high_resolution_clock::now();
+    HeartbeatTimer.expires_from_now(boost::posix_time::milliseconds(WORLD_HEARTBEAT));
+    HeartbeatTimer.async_wait(boost::bind(&Main::WorldLoop, this));
     io.run();
 
     for (size_t i = 0; i < Threads.size(); ++i)
         Threads[i]->join();
 }
 
-int GetRetVal()
+int Main::GetRetVal() const
 {
     return RetVal;
 }
 
 int main(int argc, char** argv)
 {
-    Main::CreateInstance();
+    boost::asio::io_service Service;
+    Main::CreateInstance(Service);
     Main::GetInstance()->Load(argc, argv);
     Main::GetInstance()->Run();
-    Main::DestroyInstance();
     return Main::GetInstance()->GetRetVal();
 }

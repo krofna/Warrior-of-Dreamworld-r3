@@ -43,13 +43,11 @@ public:
         }
     }
 private:
-    ObjectHolder() { }
+    ObjectHolder();
     static std::unordered_map<std::string, Player*> TranscriptionTableUsername;
     static std::unordered_map<uint64, Player* > PlayerMap;
 };
 
-std::unordered_map<std::string, Player*> ObjectHolder<Player>::TranscriptionTableUsername;
-std::unordered_map<uint64, Player*> ObjectHolder<Player>::PlayerMap;
 
 
 #endif

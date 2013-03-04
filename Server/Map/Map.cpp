@@ -18,6 +18,12 @@
 #include "Map.hpp"
 #include "Shared/ObjectHolder.hpp"
 
+Map* Map::Factory::Load(QueryResult Result)
+{
+    // TODO: Do Something With Result
+    return nullptr;
+}
+
 Map::Map()
 {
     PacketsForPlayers.reserve(10); // Not sure if 10 is a good magic number

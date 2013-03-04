@@ -21,6 +21,7 @@
 #include <fstream>
 #include <limits>
 #include <stdexcept>
+#include "Utility.hpp"
 
 class Configurable
 {
@@ -35,10 +36,13 @@ template <class T> void Configurable::GetNextToken(std::ifstream& Config, T& Dat
 {
     if (!Config)
         throw std::runtime_error("Config stream is not open !");
+    
+    std::string p;
+    Config >> p;
+    while (p[0] == '#')
+        Config >> p;
 
-    while (Config.peek() == '#')
-        Config.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    Config >> Data;
+    Data = ToType<T>(p);
 }
 
 template <class T> T Configurable::GetNextToken(std::ifstream& Config)

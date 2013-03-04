@@ -17,9 +17,10 @@
 */
 #include "Creature.hpp"
 #include "ObjectMgr.hpp"
+#include "ObjectContainer.hpp"
 #include "Database.hpp"
 
-Creature::Creature(QueryResult& Result) : Unit(Result)
+Creature::Creature()
 {
 }
 

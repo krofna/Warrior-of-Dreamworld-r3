@@ -29,7 +29,7 @@ public:
     virtual void Update(uint32 diff);
 
 protected:
-    Creature(QueryResult& Result);
+    Creature();
     virtual void Create(uint32 Entry);
 
 private:

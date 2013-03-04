@@ -18,11 +18,18 @@
 #ifndef MAP_HPP
 #define MAP_HPP
 
+#include <boost/bind.hpp>
 #include "WorldObject.hpp"
 #include "ObjectContainer.hpp"
 
 class Map : public ObjectContainer
 {
+public:
+    struct Factory
+    {
+        public:
+        Map* Load(QueryResult Result);
+    };
 public:
     Map();
     

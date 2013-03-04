@@ -90,7 +90,7 @@ WorldObjectQuests ObjectMgr::GetCreatureQuests(uint32 Entry) const
 
 void ObjectMgr::LoadCreatureTemplates()
 {
-    QueryResult Result(WorldDatabase->Query("SELECT * FROM `creature_template`"));
+    QueryResult Result(WorldDB->Query("SELECT * FROM `creature_template`"));
 
     CreatureTemplate* pTemplate;
 
@@ -114,7 +114,7 @@ void ObjectMgr::LoadCreatureTemplates()
 
 void ObjectMgr::LoadGameObjectTemplates()
 {
-    QueryResult Result(WorldDatabase->Query("SELECT * FROM `gameobject_template`"));
+    QueryResult Result(WorldDB->Query("SELECT * FROM `gameobject_template`"));
 
     GameObjectTemplate* pTemplate;
 
@@ -136,7 +136,7 @@ void ObjectMgr::LoadGameObjectTemplates()
 
 void ObjectMgr::LoadItemTemplates()
 {
-    QueryResult Result(WorldDatabase->Query("SELECT * FROM `item_template`"));
+    QueryResult Result(WorldDB->Query("SELECT * FROM `item_template`"));
 
     ItemTemplate* pTemplate;
 
@@ -160,7 +160,7 @@ void ObjectMgr::LoadItemTemplates()
 
 void ObjectMgr::LoadQuestTemplates()
 {
-    QueryResult Result(WorldDatabase->Query("SELECT * FROM `quest_template`"));
+    QueryResult Result(WorldDB->Query("SELECT * FROM `quest_template`"));
     
     QuestTemplate* pTemplate;
     
@@ -179,7 +179,7 @@ void ObjectMgr::LoadQuestTemplates()
 
 void ObjectMgr::LoadSpellTemplates()
 {
-    QueryResult Result(WorldDatabase->Query("SELECT * FROM `spell_template`"));
+    QueryResult Result(WorldDB->Query("SELECT * FROM `spell_template`"));
 
     SpellTemplate* pTemplate;
 
@@ -202,7 +202,7 @@ void ObjectMgr::LoadSpellTemplates()
 
 void ObjectMgr::LoadMapTemplates()
 {
-    QueryResult Result(WorldDatabase->Query("SELECT * FROM `map_template`"));
+    QueryResult Result(WorldDB->Query("SELECT * FROM `map_template`"));
 
     MapTemplate* pTemplate;
 
@@ -222,7 +222,7 @@ void ObjectMgr::LoadMapTemplates()
 
 void ObjectMgr::LoadPlayerTemplates()
 {
-    QueryResult Result(WorldDatabase->Query("SELECT * FROM `player_template`"));
+    QueryResult Result(WorldDB->Query("SELECT * FROM `player_template`"));
 
     PlayerTemplate* pTemplate;
 
@@ -242,7 +242,7 @@ void ObjectMgr::LoadPlayerTemplates()
 
 void ObjectMgr::LoadCreatureQuests()
 {
-    QueryResult Result(WorldDatabase->Query("SELECT * FROM `creature_quest`"));
+    QueryResult Result(WorldDB->Query("SELECT * FROM `creature_quest`"));
     
     while (Result->next())
     {

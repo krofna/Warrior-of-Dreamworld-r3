@@ -27,7 +27,8 @@ class ObjectContainer : public Grid<Object>
 public:
     ObjectContainer() : ObjectUpdateGUID(static_cast<uint64>(-1)) { }
 
-    template <class T> void ObjectUpdateField(uint64 GUID, uint8 Field, T Data);
+    template <class T>
+    void ObjectUpdateField(uint64 GUID, uint8 Field, T Data);
 
     virtual void SendUpdate(WorldSession* pSession);
 private:
@@ -47,11 +48,5 @@ void ObjectContainer::ObjectUpdateField(uint64 GUID, uint8 Field, T Data)
     (*FieldNumPtr)++;
     ObjectUpdatePckt << Field << Data;
 }
-
-void ObjectContainer::SendUpdate(WorldSession* pSession)
-{
-    pSession->Send(ObjectUpdatePckt);
-}
-
 
 #endif

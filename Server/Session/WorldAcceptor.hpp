@@ -29,11 +29,11 @@ typedef boost::asio::ip::tcp::acceptor TCPAcceptor;
 typedef std::unique_ptr<TCPAcceptor> TCPAcceptorPtr;
 typedef std::shared_ptr<WorldSession> WorldSessionPtr;
 
-class WorldAcceptor : public Singleton
+class WorldAcceptor : public Singleton<WorldAcceptor>
 {
-public:
+    friend class Singleton<WorldAcceptor>;
     WorldAcceptor(boost::asio::io_service& io);
-
+public:
     void Accept();
 private:
     void HandleAccept(const boost::system::error_code& Error);

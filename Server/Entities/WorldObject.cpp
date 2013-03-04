@@ -18,11 +18,6 @@
 #include "WorldObject.hpp"
 #include "AI.hpp"
 
-WorldObject::WorldObject(QueryResult& Result) :
-Object     (Result)
-{
-}
-
 WorldObject::~WorldObject()
 {
     delete pAI;

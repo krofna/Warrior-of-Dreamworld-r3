@@ -65,21 +65,30 @@ void Main::Load(int argc, char** argv)
     World::GetInstance()->Load();
 
     io.post(boost::bind(&World::CLI,            World::GetInstance()));
-    io.post(boost::bind(&Main::Run,             Main::GetInstance()));
+//    io.post(boost::bind(&Main::Run,             Main::GetInstance()));
     io.post(boost::bind(&WorldAcceptor::Accept,  WorldAcceptor::GetInstance()));
+
+    for (size_t i = 0 ; i < nThreads ; ++i)
+    {
+        auto th = std::make_shared<std::thread>(boost::bind(&boost::asio::io_service::run, boost::ref(io)));
+        Threads.push_back(th);
+    }
 }
 
 void Main::WorldLoop()
 {
     if (World::GetInstance()->IsStopped())
     {
+        sLog.Write(LOG_CONSOLE, LEVEL_INFO, "World is being stopped... Kicking all...");
         World::GetInstance()->KickAll();
+        io.stop();
         return;
     }
 
     ms DeltaTime = boost::chrono::duration_cast<ms>(boost::chrono::high_resolution_clock::now() - OldTime);
     World::GetInstance()->Update(DeltaTime.count());
 
+    sLog.Write(LOG_CONSOLE, LEVEL_DEBUG, "Main::WorldLoop() for %i ms", DeltaTime.count());
     OldTime += DeltaTime;
 
     HeartbeatTimer.expires_at(HeartbeatTimer.expires_at() + boost::posix_time::milliseconds(WORLD_HEARTBEAT));
@@ -96,15 +105,13 @@ void Main::ProcessOption(std::pair<std::string, std::string> const& opt)
 
 void Main::Run()
 {
-    Threads.resize(nThreads, std::make_shared<std::thread>(boost::bind(&boost::asio::io_service::run, &io)));
-
     OldTime = boost::chrono::high_resolution_clock::now();
     HeartbeatTimer.expires_from_now(boost::posix_time::milliseconds(WORLD_HEARTBEAT));
     HeartbeatTimer.async_wait(boost::bind(&Main::WorldLoop, this));
+    
     io.run();
 
-    for (size_t i = 0; i < Threads.size(); ++i)
-        Threads[i]->join();
+    std::for_each(Threads.begin(), Threads.end(), [](std::shared_ptr<std::thread>& th) { th->join(); });
 }
 
 int Main::GetRetVal() const

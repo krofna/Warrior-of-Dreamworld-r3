@@ -116,3 +116,12 @@ CREATE TABLE `gameobject`
     `y` TINYINT UNSIGNED NOT NULL,
     PRIMARY KEY(guid)
 );
+
+DROP TABLE IF EXISTS `map`;
+CREATE TABLE `map`
+(
+    `guid` BIGINT UNSIGNED NOT NULL,
+    `size_x` TINYINT UNSIGNED NOT NULL,
+    `size_y` TINYINT UNSIGNED NOT NULL,
+    PRIMARY KEY(guid)
+);

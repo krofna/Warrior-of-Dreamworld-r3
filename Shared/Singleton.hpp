@@ -19,6 +19,7 @@
 #define SINGLETON_HPP
 #include <functional>
 #include <memory>
+#include <type_traits>
 
 template <class Class>
 class Singleton

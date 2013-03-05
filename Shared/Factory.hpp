@@ -39,15 +39,16 @@ public:
     template <typename Type>
     static void Register(std::string const& TypeId)
     {
-        typename Type::Factory* ptr_Factory = new (typename Type::Factory);
-
+        std::shared_ptr<typename Type::Factory> ptr_Factory(new (typename Type::Factory));
         FactoryRegistry[TypeId] = ptr_Factory;
     }
 
-    template <typename TypeFactory>
+    // Call the destructor of the Type Factory.
+    template <typename Type>
     static void Delete(std::string const& TypeId)
     {
-        delete Cast<TypeFactory>(TypeId);
+        Cast<typename Type::Factory>(TypeId).release();
+        FactoryRegistry.erase(TypeId);
     }
 
     template <typename Type, typename... Tn>
@@ -69,9 +70,9 @@ public:
     }
 
     template <typename TypeFactory>
-    static TypeFactory* Cast(std::string const& TypeId)
+    static std::shared_ptr<TypeFactory> Cast(std::string const& TypeId)
     {
-        return boost::any_cast<TypeFactory*>(FactoryRegistry[TypeId]);
+        return boost::any_cast<std::shared_ptr<TypeFactory> >(FactoryRegistry[TypeId]);
     }
     
 private:

@@ -22,6 +22,7 @@
 #include "Shared/BasicTypes.hpp"
 
 #include <vector>
+#include <algorithm>
 #include <mutex>
 
 template <class T>
@@ -46,6 +47,7 @@ template<class T>
 class Grid<T*>
 {
     public:
+        ~Grid();
         T* At(Vector2<uint16> const& Pos);
         T* At(uint16 x, uint16 y);
         void Resize(uint16 x, uint16 y);
@@ -111,6 +113,17 @@ template <class T>
 void Grid<T>::Insert(T What)
 {
     Array[Size.y * What.GetPosition().y + What.GetPosition().x] = What;
+}
+
+template <class T>
+Grid<T*>::~Grid()
+{
+//    for (auto Iter = Array.begin() ; Iter != Array.end() ; ++Iter)
+//    {
+//        if ((*Iter))
+//            delete (*Iter);
+//    }
+//    Make double free / corruption. Haven't found yet the source.
 }
 
 template <class T>

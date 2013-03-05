@@ -49,7 +49,6 @@ IsRunning   (true)
 
 World::~World()
 {
-
 }
 
 void World::Load()
@@ -58,10 +57,10 @@ void World::Load()
     {
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Registering static factories...");
 
-        Factory::Register <Creature>   ("Creature");
-        Factory::Register <Player>     ("Player");
+        Factory::Register <Creature>     ("Creature");
+        Factory::Register <Player>       ("Player");
 
-        Factory::Register <Map>        ("Map");
+        Factory::Register <Map>          ("Map");
 
         Factory::Register <CreatureAI>   ("CreatureAI");
 

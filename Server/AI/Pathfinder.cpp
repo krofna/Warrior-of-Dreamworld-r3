@@ -29,11 +29,20 @@
 
 void Pathfinder::Initialize()
 {
-    Pathfinder::GetInstance()->pWork = nullptr;
-    Pathfinder::GetInstance()->PathfinderGrid.Resize(MAX_MAP_WIDTH, MAX_MAP_HEIGHT);
-    for(uint16 y = 0; y < MAX_MAP_HEIGHT; ++y)
-        for(uint16 x = 0; x < MAX_MAP_WIDTH; ++x)
-            Pathfinder::GetInstance()->PathfinderGrid.At(x, y)->Position = Vector2<uint16>(x, y);
+    Pathfinder::CreateInstance();
+}
+
+Pathfinder::Pathfinder()
+{
+    pWork = nullptr;
+    PathfinderGrid.Resize(MAX_MAP_WIDTH, MAX_MAP_HEIGHT);
+    for (uint16 y = 0 ; y < MAX_MAP_HEIGHT ; ++y)
+        for (uint16 x = 0 ; x < MAX_MAP_WIDTH ; ++x)
+        {
+            PathfinderGrid.At(x, y)->Position.x = x;
+            PathfinderGrid.At(x, y)->Position.y = y;
+        }
+
 }
 
 Pathfinder::~Pathfinder()

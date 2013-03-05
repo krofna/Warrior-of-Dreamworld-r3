@@ -31,7 +31,7 @@ class Unit;
 class Pathfinder : public Singleton<Pathfinder>
 {
     friend class Singleton;
-    Pathfinder() = default;
+    Pathfinder();
 public:
     static void Initialize();
     ~Pathfinder();
@@ -68,7 +68,7 @@ private:
         BLACK   = 3
     };
 
-    Grid<Node> PathfinderGrid;
+    Grid<Node*> PathfinderGrid;
     void Relax(Node* pFirst, Node* pSecond, uint16 Cost, std::priority_queue<Node*>& OpenList);
 };
 

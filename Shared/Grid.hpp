@@ -28,30 +28,48 @@ template <class T>
 class Grid
 {
 public:
-    T* At(Vector2<uint16> const& Pos);
-    T* At(uint16 x, uint16 y);
+    T At(Vector2<uint16> const& Pos);
+    T At(uint16 x, uint16 y);
     void Resize(uint16 x, uint16 y);
     void Remove(Vector2<uint16> const& Pos);
-    void Insert(T* What);
-    Vector2<uint16> GetSize();
-    uint16 GetSizeX();
-    uint16 GetSizeY();
+    void Insert(T What);
+    Vector2<uint16> GetSize() const;
+    uint16 GetSizeX() const;
+    uint16 GetSizeY() const;
 
 private:
     Vector2<uint16> Size;
-    std::vector<T*> Array;
+    std::vector<T> Array;
     std::mutex ArrayMutex;
+};
+template<class T>
+class Grid<T*>
+{
+    public:
+        T* At(Vector2<uint16> const& Pos);
+        T* At(uint16 x, uint16 y);
+        void Resize(uint16 x, uint16 y);
+        void Remove(Vector2<uint16> const& Pos);
+        void Insert(T* What);
+        Vector2<uint16> GetSize() const;
+        uint16 GetSizeX() const;
+        uint16 GetSizeY() const;
+
+    private:
+        Vector2<uint16> Size;
+        std::vector<T*> Array;
+        std::mutex ArrayMutex;
 };
 
 template <class T>
-T* Grid<T>::At(Vector2<uint16> const& Pos)
+T Grid<T>::At(Vector2<uint16> const& Pos)
 {
     std::lock_guard<std::mutex> Lock(ArrayMutex);
     return Array[Size.y * Pos.y + Pos.x];
 }
 
 template <class T>
-T* Grid<T>::At(uint16 x, uint16 y)
+T Grid<T>::At(uint16 x, uint16 y)
 {
     std::lock_guard<std::mutex> Lock(ArrayMutex);
     return Array[Size.y * y + x];
@@ -66,19 +84,19 @@ void Grid<T>::Resize(uint16 x, uint16 y)
 }
 
 template <class T>
-Vector2<uint16> Grid<T>::GetSize()
+Vector2<uint16> Grid<T>::GetSize() const
 {
     return Size;
 }
 
 template <class T>
-uint16 Grid<T>::GetSizeX()
+uint16 Grid<T>::GetSizeX() const
 {
     return Size.x;
 }
 
 template <class T>
-uint16 Grid<T>::GetSizeY()
+uint16 Grid<T>::GetSizeY() const
 {
     return Size.y;
 }
@@ -90,7 +108,59 @@ void Grid<T>::Remove(Vector2<uint16> const& Pos)
 }
 
 template <class T>
-void Grid<T>::Insert(T* What)
+void Grid<T>::Insert(T What)
+{
+    Array[Size.y * What.GetPosition().y + What.GetPosition().x] = What;
+}
+
+template <class T>
+T* Grid<T*>::At(Vector2<uint16> const& Pos)
+{
+    std::lock_guard<std::mutex> Lock(ArrayMutex);
+    return Array[Size.y * Pos.y + Pos.x];
+}
+
+template <class T>
+T* Grid<T*>::At(uint16 x, uint16 y)
+{
+    std::lock_guard<std::mutex> Lock(ArrayMutex);
+    return Array[Size.y * y + x];
+}
+
+template <class T>
+void Grid<T*>::Resize(uint16 x, uint16 y)
+{
+    Size.x = x;
+    Size.y = y;
+    Array.resize(x * y, new T);
+}
+
+template <class T>
+Vector2<uint16> Grid<T*>::GetSize() const
+{
+    return Size;
+}
+
+template <class T>
+uint16 Grid<T*>::GetSizeX() const
+{
+    return Size.x;
+}
+
+template <class T>
+uint16 Grid<T*>::GetSizeY() const
+{
+    return Size.y;
+}
+
+template <class T>
+void Grid<T*>::Remove(Vector2<uint16> const& Pos)
+{
+    Array[Size.y * Pos.y + Pos.x] = nullptr;
+}
+
+template <class T>
+void Grid<T*>::Insert(T* What)
 {
     Array[Size.y * What->GetPosition().y + What->GetPosition().x] = What;
 }

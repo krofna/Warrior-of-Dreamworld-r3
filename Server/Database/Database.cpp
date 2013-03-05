@@ -27,7 +27,10 @@ Database::~Database()
 
 void Database::LoadFromConfig(std::ifstream& Config)
 {
-    Connection.reset(Driver->connect(GetNextToken<std::string>(Config), GetNextToken<std::string>(Config), GetNextToken<std::string>(Config)));
+    std::string hostName = GetNextToken<std::string>(Config);
+    std::string userName = GetNextToken<std::string>(Config);
+    std::string password = GetNextToken<std::string>(Config);
+    Connection.reset(Driver->connect(hostName, userName, password));
     Connection->setSchema(GetNextToken<std::string>(Config));
     Statement.reset(Connection->createStatement());
 }
@@ -40,7 +43,7 @@ void Database::Execute(const char* Sql)
 QueryResult Database::Query(const char* Sql)
 {
     PStatement.reset(Connection->prepareStatement(Sql));
-    return std::move(QueryResult(PStatement->executeQuery()));
+    return QueryResult(PStatement->executeQuery());
 }
 
 uint64 Database::GenerateGUID()

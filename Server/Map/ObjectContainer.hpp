@@ -22,7 +22,7 @@
 #include "Object.hpp"
 #include "WorldSession.hpp"
 
-class ObjectContainer : public Grid<Object>
+class ObjectContainer : public Grid<Object*>
 {
 public:
     ObjectContainer() : ObjectUpdateGUID(static_cast<uint64>(-1)) { }

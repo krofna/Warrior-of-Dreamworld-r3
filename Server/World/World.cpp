@@ -98,17 +98,21 @@ void World::Load()
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Loading maps...");
         QueryResult Result = std::move(WorldDB->Query("SELECT * FROM `map`"));
         while (Result->next())
+        {
             Map* p_Map = Factory::Load <Map> ("Map", std::move(Result)); // What do you want to do with p_Map ?
+            // sLog.Write(FILTER_LOADING, LEVEL_INFO, "Map %i loaded", p_Map->GetGUID());
+            sLog.Write(FILTER_LOADING, LEVEL_INFO, "One map loaded.");
+        }
         sLog.Write(FILTER_LOADING, LEVEL_INFO, "Maps loaded.");
     }
     catch (sql::SQLException& e)
     {
-        sLog.Write(FILTER_LOADING, LEVEL_FATAL, "SQL Exception: ", e.what());
+        sLog.Write(FILTER_LOADING, LEVEL_FATAL, "SQL Exception: %s", e.what());
         exit(1);
     }
     catch (std::exception& e)
     {
-        sLog.Write(FILTER_LOADING, LEVEL_FATAL, "Exception: ", e.what());
+        sLog.Write(FILTER_LOADING, LEVEL_FATAL, "Exception: %s", e.what());
         exit(2);
     }
 }

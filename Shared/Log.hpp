@@ -66,6 +66,7 @@ template<typename... Values> void Log::Write(uint8 Level, uint8 Filter, std::str
         return;
     
     std::string Formated = Format(String, Vals...);
+    Formated += '\n';
 
     LogMutex.lock();
     if (DoWrite[LOG_CONSOLE])

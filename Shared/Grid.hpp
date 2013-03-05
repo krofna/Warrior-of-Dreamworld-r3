@@ -43,25 +43,6 @@ private:
     std::vector<T> Array;
     std::mutex ArrayMutex;
 };
-template<class T>
-class Grid<T*>
-{
-    public:
-        ~Grid();
-        T* At(Vector2<uint16> const& Pos);
-        T* At(uint16 x, uint16 y);
-        void Resize(uint16 x, uint16 y);
-        void Remove(Vector2<uint16> const& Pos);
-        void Insert(T* What);
-        Vector2<uint16> GetSize() const;
-        uint16 GetSizeX() const;
-        uint16 GetSizeY() const;
-
-    private:
-        Vector2<uint16> Size;
-        std::vector<T*> Array;
-        std::mutex ArrayMutex;
-};
 
 template <class T>
 T Grid<T>::At(Vector2<uint16> const& Pos)
@@ -111,69 +92,6 @@ void Grid<T>::Remove(Vector2<uint16> const& Pos)
 
 template <class T>
 void Grid<T>::Insert(T What)
-{
-    Array[Size.y * What.GetPosition().y + What.GetPosition().x] = What;
-}
-
-template <class T>
-Grid<T*>::~Grid()
-{
-//    for (auto Iter = Array.begin() ; Iter != Array.end() ; ++Iter)
-//    {
-//        if ((*Iter))
-//            delete (*Iter);
-//    }
-//    Make double free / corruption. Haven't found yet the source.
-}
-
-template <class T>
-T* Grid<T*>::At(Vector2<uint16> const& Pos)
-{
-    std::lock_guard<std::mutex> Lock(ArrayMutex);
-    return Array[Size.y * Pos.y + Pos.x];
-}
-
-template <class T>
-T* Grid<T*>::At(uint16 x, uint16 y)
-{
-    std::lock_guard<std::mutex> Lock(ArrayMutex);
-    return Array[Size.y * y + x];
-}
-
-template <class T>
-void Grid<T*>::Resize(uint16 x, uint16 y)
-{
-    Size.x = x;
-    Size.y = y;
-    Array.resize(x * y, new T);
-}
-
-template <class T>
-Vector2<uint16> Grid<T*>::GetSize() const
-{
-    return Size;
-}
-
-template <class T>
-uint16 Grid<T*>::GetSizeX() const
-{
-    return Size.x;
-}
-
-template <class T>
-uint16 Grid<T*>::GetSizeY() const
-{
-    return Size.y;
-}
-
-template <class T>
-void Grid<T*>::Remove(Vector2<uint16> const& Pos)
-{
-    Array[Size.y * Pos.y + Pos.x] = nullptr;
-}
-
-template <class T>
-void Grid<T*>::Insert(T* What)
 {
     Array[Size.y * What->GetPosition().y + What->GetPosition().x] = What;
 }

@@ -37,11 +37,13 @@ Pathfinder::Pathfinder()
     pWork = nullptr;
     PathfinderGrid.Resize(MAX_MAP_WIDTH, MAX_MAP_HEIGHT);
     for (uint16 y = 0 ; y < MAX_MAP_HEIGHT ; ++y)
+    {
         for (uint16 x = 0 ; x < MAX_MAP_WIDTH ; ++x)
         {
             PathfinderGrid.At(x, y)->Position.x = x;
             PathfinderGrid.At(x, y)->Position.y = y;
         }
+    }
 }
 
 Pathfinder::~Pathfinder()

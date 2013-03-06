@@ -20,6 +20,7 @@
 
 #include "Shared/Vector2.hpp"
 #include "Shared/BasicTypes.hpp"
+#include "Shared/Utility.hpp"
 
 #include <vector>
 #include <algorithm>
@@ -29,30 +30,32 @@ template <class T>
 class Grid
 {
 public:
-    T At(Vector2<uint16> const& Pos);
-    T At(uint16 x, uint16 y);
+    T* At(Vector2<uint16> const& Pos);
+    T* At(uint16 x, uint16 y);
     void Resize(uint16 x, uint16 y);
+    void Allocate(uint16 x, uint16 y);
+    void Deallocate();
     void Remove(Vector2<uint16> const& Pos);
-    void Insert(T What);
+    void Insert(T* What);
     Vector2<uint16> GetSize() const;
     uint16 GetSizeX() const;
     uint16 GetSizeY() const;
 
 private:
     Vector2<uint16> Size;
-    std::vector<T> Array;
+    std::vector<T*> Array;
     std::mutex ArrayMutex;
 };
 
 template <class T>
-T Grid<T>::At(Vector2<uint16> const& Pos)
+T* Grid<T>::At(Vector2<uint16> const& Pos)
 {
     std::lock_guard<std::mutex> Lock(ArrayMutex);
     return Array[Size.y * Pos.y + Pos.x];
 }
 
 template <class T>
-T Grid<T>::At(uint16 x, uint16 y)
+T* Grid<T>::At(uint16 x, uint16 y)
 {
     std::lock_guard<std::mutex> Lock(ArrayMutex);
     return Array[Size.y * y + x];
@@ -64,6 +67,20 @@ void Grid<T>::Resize(uint16 x, uint16 y)
     Size.x = x;
     Size.y = y;
     Array.resize(x * y);
+}
+
+template <class T>
+void Grid<T>::Allocate(uint16 x, uint16 y)
+{
+    Resize(x, y);
+    for (uint16 i = 0; i < x * y; ++i)
+        Array[i] = new T;
+}
+
+template <class T>
+void Grid<T>::Deallocate()
+{
+    std::for_each(Array.begin(), Array.end(), Deleter());
 }
 
 template <class T>
@@ -91,7 +108,7 @@ void Grid<T>::Remove(Vector2<uint16> const& Pos)
 }
 
 template <class T>
-void Grid<T>::Insert(T What)
+void Grid<T>::Insert(T* What)
 {
     Array[Size.y * What->GetPosition().y + What->GetPosition().x] = What;
 }

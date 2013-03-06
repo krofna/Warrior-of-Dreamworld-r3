@@ -35,7 +35,7 @@ void Pathfinder::Initialize()
 Pathfinder::Pathfinder()
 {
     pWork = nullptr;
-    PathfinderGrid.Resize(MAX_MAP_WIDTH, MAX_MAP_HEIGHT);
+    PathfinderGrid.Allocate(MAX_MAP_WIDTH, MAX_MAP_HEIGHT);
     for (uint16 y = 0 ; y < MAX_MAP_HEIGHT ; ++y)
     {
         for (uint16 x = 0 ; x < MAX_MAP_WIDTH ; ++x)
@@ -56,6 +56,7 @@ Pathfinder::~Pathfinder()
         delete pWork;
     }
     WorkMutex.unlock();
+    PathfinderGrid.Deallocate();
 }
 
 void Pathfinder::Enqueue(MotionMaster* pMotionMaster, Vector2<uint16> Origin, Vector2<uint16> Target)
@@ -111,7 +112,7 @@ void Pathfinder::GeneratePath()
 {
     std::stack<Vector2<uint16> >* pPath = new std::stack<Vector2<uint16> >;
 
-    Grid<Object*>* pGrid = dynamic_cast<Grid<Object*>* >(pWork->pMe->GetContainer());
+    Grid<Object>* pGrid = dynamic_cast<Grid<Object>* >(pWork->pMe->GetContainer());
 
     for (uint16 y = 0; y < MAX_MAP_HEIGHT; ++y)
         for (uint16 x = 0; x < MAX_MAP_WIDTH; ++x)

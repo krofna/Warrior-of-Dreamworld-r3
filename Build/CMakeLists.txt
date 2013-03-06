@@ -25,8 +25,6 @@ endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-std=gnu++11)
-    add_definitions(-L /lib64/)
-    add_definitions(-lpthread)
 endif()
 
 if (NOT BUILD_SERVER)

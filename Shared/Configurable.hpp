@@ -38,10 +38,11 @@ template <class T> void Configurable::GetNextToken(std::ifstream& Config, T& Dat
         throw std::runtime_error("Config stream is not open !");
     
     std::string p;
-    Config >> p;
-    while (p[0] == '#')
-        Config >> p;
+    while (std::getline(Config, p) && (p[0] == '#' || p.empty()));
 
+    if (p[0] == '#' || p.empty())
+        throw std::runtime_error("End of file reached, haven't found any data.");
+    
     Data = ToType<T>(p);
 }
 

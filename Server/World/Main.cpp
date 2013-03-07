@@ -51,7 +51,6 @@ void Main::Load(int argc, char** argv)
 
 
     std::ifstream WorldFile("WorldServer.conf");
-    std::ifstream CharactersFile("CharactersServer.conf");
     std::ifstream LogFile("LogConfig.conf");
 
     // Log init
@@ -59,7 +58,7 @@ void Main::Load(int argc, char** argv)
    
     // Database init
     DatabaseFactory::GetInstance()->CreateDatabase("World", WorldFile);
-    DatabaseFactory::GetInstance()->CreateDatabase("Characters", CharactersFile);
+    DatabaseFactory::GetInstance()->CreateDatabase("Characters", WorldFile);
 
     // World init
     World::GetInstance()->Load();

@@ -1,6 +1,6 @@
 /*
     Warrior of Dreamworld, 2D Massivly Mutiplayer Online Role-playing Game
-    Copyright (C) 2012-2013 Mislav Blazevic, Ryan Lahfa
+    Copyright (C) 2013 Mislav Blazevic
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -16,10 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "WorldSession.hpp"
-#include "Shared/Opcodes.hpp"
-#include "Map.hpp"
-#include "Player.hpp"
 #include "Shared/Log.hpp"
+#include "Shared/Opcodes.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/asio/write.hpp>
@@ -28,17 +26,12 @@
 
 WorldSession::WorldSession(boost::asio::io_service& io) :
 Socket                    (io),
-pPlayer                   (nullptr)
+Resolver                  (io)
 {
 }
 
 WorldSession::~WorldSession()
 {
-}
-
-Player* WorldSession::GetPlayer()
-{
-    return pPlayer;
 }
 
 void WorldSession::Start()
@@ -73,23 +66,11 @@ void WorldSession::HandleReceive(const boost::system::error_code& Error)
 
     if (Error)
     {
-        if (pPlayer)
-        {
-            sLog.Write(LEVEL_ERROR, FILTER_PACKET, "Failed to receive packet. Kicking player %s", pPlayer->GetName());
-            pPlayer->Kick();
-        }
-        else
-            sLog.Write(LEVEL_ERROR, FILTER_PACKET, "Failed to receive packet from unknown player");
+        sLog.Write(LEVEL_ERROR, FILTER_PACKET, "Failed to receive packet");
     }
     else if (Packet.GetOpcode() >= MSG_COUNT)
     {
-        if (pPlayer)
-        {
-            sLog.Write(LEVEL_ERROR, FILTER_PACKET, "Received %u: Bad opcode! Kicking player %s", Packet.GetOpcode(), pPlayer->GetName());
-            pPlayer->Kick();
-        }
-        else
-            sLog.Write(LEVEL_ERROR, FILTER_PACKET, "Received %u: Bad opcode from unknown player", Packet.GetOpcode());
+        sLog.Write(LEVEL_ERROR, FILTER_PACKET, "Received %u: Bad opcode", Packet.GetOpcode());
     }
     else
     {
@@ -121,16 +102,8 @@ void WorldSession::HandleSend(const boost::system::error_code& Error)
 {
     if (Error)
     {
-        if (pPlayer)
-        {
-            sLog.Write(LEVEL_ERROR, FILTER_PACKET, "Failed to send packet: %s to player %s", 
-                OpcodeTable[MessageQueue.front().GetOpcode()].Name, pPlayer->GetName());
-        }
-        else
-        {
-            sLog.Write(LEVEL_ERROR, FILTER_PACKET, "Failed to send packet: %s to unknown player", 
-                OpcodeTable[MessageQueue.front().GetOpcode()].Name);
-        }
+        sLog.Write(LEVEL_ERROR, FILTER_PACKET, "Failed to send packet: %s", 
+            OpcodeTable[MessageQueue.front().GetOpcode()].Name);
     }
 
     MessageQueue.pop();
@@ -151,5 +124,21 @@ void WorldSession::HandlePubkeyOpcode()
 }
 
 void WorldSession::HandleLoginOpcode()
+{
+}
+
+void WorldSession::HandleAddObjectOpcode()
+{
+}
+
+void WorldSession::HandleRemoveObjectOpcode()
+{
+}
+
+void WorldSession::HandleRelocateObjectOpcode()
+{
+}
+
+void WorldSession::HandleUpdateObjectOpcode()
 {
 }

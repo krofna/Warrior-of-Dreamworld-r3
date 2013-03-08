@@ -15,19 +15,37 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "Shared/Opcodes.hpp"
+#include "Main.hpp"
+#include "WorldSession.hpp"
 
-#ifndef MSVC
-    #include "WorldSession.hpp"
-#endif
-
-OpcodeHandler OpcodeTable[MSG_COUNT] = 
+Main::Main(boost::asio::io_service& io)
 {
-    { "MSG_NULL",               &WorldSession::HandleNULL },
-    { "MSG_PUBKEY",             &WorldSession::HandlePubkeyOpcode },
-    { "MSG_LOGIN",              &WorldSession::HandleLoginOpcode },
-    { "SMSG_ADD_OBJECT",        &WorldSession::HandleNULL },
-    { "SMSG_REMOVE_OBJECT",     &WorldSession::HandleNULL },
-    { "SMSG_RELOCATE_OBJECT",   &WorldSession::HandleNULL },
-    { "SMSG_UPDATE_OBJECT",     &WorldSession::HandleNULL }
-};
+    pSession = new WorldSession(io);
+}
+
+Main::~Main()
+{
+    delete pSession;
+}
+
+void Main::Load(int argc, char** argv)
+{
+}
+
+void Main::Run()
+{
+}
+
+int Main::GetRetVal() const
+{
+    return RetVal;
+}
+
+int main(int argc, char** argv)
+{
+    boost::asio::io_service Service;
+    Main::CreateInstance(Service);
+    Main::GetInstance()->Load(argc, argv);
+    Main::GetInstance()->Run();
+    return Main::GetInstance()->GetRetVal();
+}

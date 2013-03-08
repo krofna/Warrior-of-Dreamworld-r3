@@ -15,19 +15,24 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "Shared/Opcodes.hpp"
+#include "Shared/Singleton.hpp"
 
-#ifndef MSVC
-    #include "WorldSession.hpp"
-#endif
+#include <boost/asio.hpp>
 
-OpcodeHandler OpcodeTable[MSG_COUNT] = 
+class WorldSession;
+
+class Main : public Singleton<Main>
 {
-    { "MSG_NULL",               &WorldSession::HandleNULL },
-    { "MSG_PUBKEY",             &WorldSession::HandlePubkeyOpcode },
-    { "MSG_LOGIN",              &WorldSession::HandleLoginOpcode },
-    { "SMSG_ADD_OBJECT",        &WorldSession::HandleNULL },
-    { "SMSG_REMOVE_OBJECT",     &WorldSession::HandleNULL },
-    { "SMSG_RELOCATE_OBJECT",   &WorldSession::HandleNULL },
-    { "SMSG_UPDATE_OBJECT",     &WorldSession::HandleNULL }
+    friend class Singleton;
+    Main(boost::asio::io_service& io);
+public:
+    ~Main();
+
+    void Load(int argc, char** argv);
+    void Run();
+    int GetRetVal() const;
+
+private:
+    int RetVal;
+    WorldSession* pSession;
 };

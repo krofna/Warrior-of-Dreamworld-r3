@@ -19,6 +19,7 @@ ${SFGUI_INCLUDE_DIRS}
 ${CMAKE_SOURCE_DIR}/../Client/Session
 ${CMAKE_SOURCE_DIR}/../Client/
 ${CMAKE_SOURCE_DIR}/../Client/Global
+${CMAKE_SOURCE_DIR}/../Client/Main
 ${CMAKE_SOURCE_DIR}/..
 )
 

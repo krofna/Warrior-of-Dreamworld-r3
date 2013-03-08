@@ -41,6 +41,8 @@ public:
 
     // Opcode handlers
     void HandleNULL();
+    void HandlePubkeyOpcode();
+    void HandleLoginOpcode();
     
     Player* GetPlayer();
 private:
@@ -51,7 +53,6 @@ private:
     TCPSocket Socket;
     WorldPacket Packet;
     Player* pPlayer;
-
     std::queue<WorldPacket> MessageQueue;
 };
 

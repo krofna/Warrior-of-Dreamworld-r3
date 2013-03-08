@@ -26,11 +26,17 @@
     class WorldSession;
 #endif
 
-#define MSG_COUNT 1
+#define MSG_COUNT 7
 
 enum Opcodes
 {
     MSG_NULL,
+    MSG_PUBKEY,
+    MSG_LOGIN,
+    SMSG_ADD_OBJECT,
+    SMSG_REMOVE_OBJECT,
+    SMSG_RELOCATE_OBJECT,
+    SMSG_UPDATE_OBJECT
 };
 
 struct OpcodeHandler

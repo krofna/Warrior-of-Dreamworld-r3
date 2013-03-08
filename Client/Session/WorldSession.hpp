@@ -18,25 +18,41 @@
 #ifndef WORLD_SESSION_HPP
 #define WORLD_SESSION_HPP
 
+#include "Shared/WorldPacket.hpp"
+
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <queue>
 
 typedef boost::asio::ip::tcp::socket TCPSocket;
+typedef boost::asio::ip::tcp::resolver TCPResolver;
 
 class WorldSession : public boost::enable_shared_from_this<WorldSession>
 {
-    friend class WorldAcceptor;
 public:
     WorldSession(boost::asio::io_service& io);
     ~WorldSession();
 
+    void Start();
+    void Send(WorldPacket& Packet);
+
     // Opcode handlers
     void HandleNULL();
-
+    void HandlePubkeyOpcode();
+    void HandleLoginOpcode();
+    void HandleAddObjectOpcode();
+    void HandleRemoveObjectOpcode();
+    void HandleRelocateObjectOpcode();
+    void HandleUpdateObjectOpcode();
 private:
     void HandleSend(const boost::system::error_code& Error);
     void HandleReceive(const boost::system::error_code& Error);
     void HandleHeader(const boost::system::error_code& Error);
+
+    WorldPacket Packet;
+    TCPSocket Socket;
+    TCPResolver Resolver;
+    std::queue<WorldPacket> MessageQueue;
 };
 
 #endif

@@ -15,20 +15,17 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef MAIN_MENU_HPP
-#define MAIN_MENU_HPP
+#ifndef WINDOW_HPP
+#define WINDOW_HPP
 
-/*
- * TODO:
- * Load placeholder image in background and render immovable
- * sfgui login screen. Should inherit from generic GameState (need better name)
- * and will be handled in similar way we handled it in original WoD,
- * but this time in Main.
- * @Krofna will deal with abstract design and @OzVessalius should fill in
- * implementations of MainMenu functions
- * */
-class MainMenu
+#include <SFML/Graphics/RenderWindow.hpp>
+
+class Drawable;
+
+class Window : public sf::Window, public Singleton<Window>
 {
+public:
+    void Draw(Drawable* pWhat);
 };
 
 #endif

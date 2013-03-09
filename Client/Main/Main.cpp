@@ -16,10 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "Main.hpp"
+#include "Game.hpp"
 #include "WorldSession.hpp"
 
 Main::Main(boost::asio::io_service& io)
 {
+    Game::CreateInstance();
     pSession = new WorldSession(io);
 }
 

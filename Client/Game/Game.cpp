@@ -1,6 +1,6 @@
 /*
     Warrior of Dreamworld, 2D Massivly Mutiplayer Online Role-playing Game
-    Copyright (C) 2013 Mislav Blazevic, Ryan Lahfa
+    Copyright (C) 2012-2013 Mislav Blazevic, Ryan Lahfa
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -15,20 +15,45 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef MAIN_MENU_HPP
-#define MAIN_MENU_HPP
+#include "Game.hpp"
+#include "GameState.hpp"
 
-/*
- * TODO:
- * Load placeholder image in background and render immovable
- * sfgui login screen. Should inherit from generic GameState (need better name)
- * and will be handled in similar way we handled it in original WoD,
- * but this time in Main.
- * @Krofna will deal with abstract design and @OzVessalius should fill in
- * implementations of MainMenu functions
- * */
-class MainMenu
+Game::Game()
 {
-};
+}
 
-#endif
+Game::~Game()
+{
+    PopAllStates();
+}
+
+void Game::Update()
+{
+    while (Window.pollEvent(Event))
+        StateStack.top()->HandleEvent(Event);
+
+    Window::GetInstance()->clear();
+    StateStack.top()->Draw();
+    Window::GetInstance()->display();
+    StateStack.top()->Update();
+}
+
+void Game::PushState(GameState* pState)
+{
+    StateStack.push(pState);
+}
+
+void Game::PopState()
+{
+    if (!StateStack.empty())
+    {
+        delete StateStack.top();
+        StateStack.pop();
+    }
+}
+
+void Game::PopAllStates()
+{
+    while (!StateStack.empty())
+        PopState();
+}

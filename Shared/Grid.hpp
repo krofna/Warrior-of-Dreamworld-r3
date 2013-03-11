@@ -66,7 +66,7 @@ void Grid<T>::Resize(uint16 x, uint16 y)
 {
     Size.x = x;
     Size.y = y;
-    Array.resize(x * y);
+    Array.resize(x * y, nullptr);
 }
 
 template <class T>

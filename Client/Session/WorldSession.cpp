@@ -1,6 +1,6 @@
 /*
     Warrior of Dreamworld, 2D Massivly Mutiplayer Online Role-playing Game
-    Copyright (C) 2012-2013 Mislav Blazevic
+    Copyright (C) 2012-2013 Mislav Blazevic, Ryan Lahfa
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -90,7 +90,7 @@ void WorldSession::Send(WorldPacket& Packet)
 
     Packet.UpdateSizeData();
     MessageQueue.push(Packet);
-    if(MessageQueue.size() == 1)
+    if (MessageQueue.size() == 1)
     {
         boost::asio::async_write(Socket,
             boost::asio::buffer(Packet.GetDataWithHeader(), Packet.GetSizeWithHeader()),

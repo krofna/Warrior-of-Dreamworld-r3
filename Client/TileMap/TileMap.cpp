@@ -30,11 +30,9 @@ FullScreen      (FullScreen)
 
     File >> MapWidth >> MapHeight;
     Map[MAP_FLOOR].resize(MapWidth * MapHeight * 4);
-    MapWidth *= TILE_SIZE;
-    MapHeight *= TILE_SIZE;
 
     File >> TilesetFileName;
-    States.texture = sObjectMgr->GetTileset(TilesetFileName);
+    States[MAP_FLOOR].texture = sObjectMgr->GetTileset(TilesetFileName);
 
     while (File >> x >> y >> tx >> ty)
     {
@@ -51,7 +49,7 @@ FullScreen      (FullScreen)
         index += 4;
     }
 
-    Map[MAP_OBJECT].resize(Window::GetInstance()->getSize().x / TILE_SIZE, Window::GetInstance()->getSize().y / TILE_SIZE);
+    Map[MAP_OBJECT].resize((Window::GetInstance()->getSize().x / TILE_SIZE) * (Window::GetInstance()->getSize().y / TILE_SIZE) * 4);
 }
 
 void TileMap::HandleEvent(sf::Event Event)
@@ -85,29 +83,29 @@ void TileMap::Draw()
         {
             if (MoveCamera & MOVE_UP && CameraTop > 0)
             {
-                CameraTop -= TILE_SIZE;
-                CameraBottom -= TILE_SIZE;
+                --CameraTop;
+                --CameraBottom;
                 Camera.move(0, -TILE_SIZE);
             }
 
             else if (MoveCamera & MOVE_DOWN && CameraBottom < MapHeight)
             {
-                CameraTop += TILE_SIZE;
-                CameraBottom += TILE_SIZE;
+                ++CameraTop;
+                ++CameraBotto;
                 Camera.move(0, TILE_SIZE);
             }
 
             if (MoveCamera & MOVE_RIGHT && CameraRight < MapWidth)
             {
-                CameraLeft += TILE_SIZE;
-                CameraRight += TILE_SIZE;
+                ++CameraLeft;
+                ++CameraRight;
                 Camera.move(TILE_SIZE, 0);
             }
 
             else if (MoveCamera & MOVE_LEFT && CameraLeft > 0)
             {
-                CameraLeft -= TILE_SIZE;
-                CameraRight -= TILE_SIZE;
+                --CameraLeft;
+                --CameraRight;
                 Camera.move(-TILE_SIZE, 0);
             }
 
@@ -130,6 +128,38 @@ void TileMap::AddObject(Object* pObject)
 
 void TileMap::BuildObjectMap()
 {
-    // This will construct Map[MAP_OBJECT] from MapObjects
-    // Purpose is to update all animations
+    // Construct Map[MAP_OBJECT] from MapObjects in current camera range
+    // Should be called whenever animations need to be updated
+    Map[MAP_OBJECT].clear();
+    MapIter = 0;
+    for (uint16 y = CameraTop; y < (CameraBottom > MapHeight ? MapHeight : CameraBottom); ++y)
+    {
+        for (uint16 x = CameraLeft; x < (CameraRight > MapWidth ? MapWidth : CameraRight); ++x)
+        {
+            if (Object* pObject = MapObjects.At(x, y)
+            {
+                // Object arrived to tile
+                if (pObject->GetWorldX() % 32 == 0 &&
+                    pObject->GetWorldY() % 32 == 0)
+                    MapObjects.Insert(pObject->GetPosition());
+                
+                // Time to lag!
+                if (MapIter == Map[MAP_OBJECT].size())
+                    // It is reasonable to assume that there will not be more than 16 extra objects
+                    Map[MAP_OBJECT].resize(Map[MAP_OBJECT].size() + 16 * 4);
+
+                Map[MAP_OBJECT][MapIter + 0].position = sf::Vector2f(GetWorldX(), GetWorldY());
+                Map[MAP_OBJECT][MapIter + 1].position = sf::Vector2f(GetWorldX(), GetWorldY() + 1);
+                Map[MAP_OBJECT][MapIter + 2].position = sf::Vector2f(GetWorldX() + 1, GetWorldY() + 1);
+                Map[MAP_OBJECT][MapIter + 3].position = sf::Vector2f(GetWorldX() + 1, GetWorldY());
+
+                Map[MAP_OBJECT][MapIter + 0].texCoords = sf::Vector2f(pObject->GetTextureX() * 32, pObject->GetTextureY() * 32);
+                Map[MAP_OBJECT][MapIter + 1].texCoords = sf::Vector2f(pObject->GetTextureX() * 32, (pObject->GetTextureY() + 1) * 32);
+                Map[MAP_OBJECT][MapIter + 2].texCoords = sf::Vector2f((pObject->GetTextureX() + 1) * 32, (pObject->GetTextureY() + 1) * 32);
+                Map[MAP_OBJECT][MapIter + 3].texCoords = sf::Vector2f((pObject->GetTextureX() + 1) * 32, pObject->GetTextureY() * 32);
+
+                MapIter += 4;
+            }
+        }
+    }
 }

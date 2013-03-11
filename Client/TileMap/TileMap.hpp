@@ -23,8 +23,6 @@
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 
-#define TILE_SIZE 32
-
 enum
 {
     MOVE_STOP   = 0,
@@ -63,12 +61,12 @@ public:
 
 private:
     // Camera stuff
-    uint32 MapWidth;
-    uint32 MapHeight;
-    uint32 CameraLeft;
-    uint32 CameraTop;
-    uint32 CameraRight;
-    uint32 CameraBottom;
+    uint16 MapWidth;
+    uint16 MapHeight;
+    uint16 CameraLeft;
+    uint16 CameraTop;
+    uint16 CameraRight;
+    uint16 CameraBottom;
     uint8 MoveCamera;
     bool FullScreen; // TODO: Useless, always true?
     sf::View Camera;

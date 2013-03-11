@@ -16,8 +16,3 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "Window.hpp"
-#include "Drawable.hpp"
-
-void Window::Draw(Drawable* pWhat)
-{
-}

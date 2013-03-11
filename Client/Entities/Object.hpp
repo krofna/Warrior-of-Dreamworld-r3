@@ -22,7 +22,7 @@
 
 #include <vector>
 
-// Keep in mind that spells are valid objects as well on cliend side!
+// Keep in mind that spells are valid objects as well on client side!
 class Object
 {
 public:

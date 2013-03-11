@@ -29,7 +29,6 @@ public:
     virtual void Draw() = 0;
 
 protected:
-    std::list<Drawable*> Drawables;
 };
 
 #endif

@@ -20,12 +20,8 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
-class Drawable;
-
 class Window : public sf::Window, public Singleton<Window>
 {
-public:
-    void Draw(Drawable* pWhat);
 };
 
 #endif

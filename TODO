@@ -2,9 +2,15 @@ OzVessalius (Fullmetal-Alchimist):
 - Drop boost:: where we can use std::
 - Some styles issues.
 - see issue #2
+- 
 
 Krofna:
 - Pathfinding: decrease_key is optional: simply make OpenList of of "lighter" nodes, i.e. vector2<uint16> + cost for heap maintenance
 - Database: loading and saving the world
 - Login encryption using RSA (Crypto++)
 - Get the basic map/objects working
+
+Art?
+I'll need to save money for one more month to have enough to buy my
+sister (art student) Wacom Intuos tablet. This might be too long to wait.
+Any ideas?

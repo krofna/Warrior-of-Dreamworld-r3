@@ -64,7 +64,6 @@ void Main::Load(int argc, char** argv)
     World::GetInstance()->Load();
 
     io.post(boost::bind(&World::CLI,            World::GetInstance()));
-//    io.post(boost::bind(&Main::Run,             Main::GetInstance()));
     io.post(boost::bind(&WorldAcceptor::Accept,  WorldAcceptor::GetInstance()));
 
     for (size_t i = 0 ; i < nThreads ; ++i)

@@ -15,25 +15,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "Shared/Singleton.hpp"
+#ifndef WORLD_HPP
+#define WORLD_HPP
 
-#include <boost/asio.hpp>
+#include "GameState.hpp"
 
-class WorldSession;
-
-class Main : public Singleton<Main>
+class World : public GameState, public Singleton<World>
 {
-    friend class Singleton;
-    Main(boost::asio::io_service& io);
-public:
-    ~Main();
-
-    void Load(int argc, char** argv);
-    void Run();
-    int GetRetVal() const;
-
-private:
-    int RetVal;
-    WorldSession* pSession;
-    boost::asio::io_service& io
+    
 };

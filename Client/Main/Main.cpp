@@ -19,7 +19,18 @@
 #include "Game.hpp"
 #include "WorldSession.hpp"
 
-Main::Main(boost::asio::io_service& io)
+/*
+ * **Need ideas**
+ * 
+ * Krofna: Maybe create prioritized io_service like done here:
+ * http://www.boost.org/doc/libs/1_45_0/doc/html/boost_asio/example/invocation/prioritised_handlers.cpp
+ * which will give highest priority to networking, second highest to
+ * animation update (see: TileMap) and lowest to Game::GetInstance()->Update
+ * which basically redraws and handles input?
+ * */
+
+Main::Main(boost::asio::io_service& io) :
+io        (io)
 {
     Game::CreateInstance();
     pSession = new WorldSession(io);

@@ -5,7 +5,7 @@ include(FindThreads)
 include(FindSFGUI)
 
 FIND_PACKAGE(SFML COMPONENTS SYSTEM WINDOW GRAPHICS REQUIRED)
-FIND_PACKAGE(Boost COMPONENTS system serialization REQUIRED)
+FIND_PACKAGE(Boost COMPONENTS system REQUIRED)
 
 link_directories(${Boost_LIBRARY_DIRS})
 link_directories(${SFML_LIBRARY_DIRS})

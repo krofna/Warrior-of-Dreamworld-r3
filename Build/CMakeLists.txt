@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(Warrior-of-Dreamworld-r2)
+project(Warrior-of-Dreamworld-r3)
 
 if (WIN32)
     set (Boost_USE_STATIC_LIBS TRUE)

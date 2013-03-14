@@ -1,8 +1,6 @@
 OzVessalius (Fullmetal-Alchimist):
 - Drop boost:: where we can use std::
-- Some styles issues.
-- see issue #2
-- 
+- Some styles issues. FUUUUUUUUU
 
 Krofna:
 - Pathfinding: decrease_key is optional: simply make OpenList of of "lighter" nodes, i.e. vector2<uint16> + cost for heap maintenance
@@ -14,3 +12,4 @@ Art?
 I'll need to save money for one more month to have enough to buy my
 sister (art student) Wacom Intuos tablet. This might be too long to wait.
 Any ideas?
+GIRLFRIEND. GIRLFRIEND. GIRLFRIEND. Joking. She think that she can't do something incredible. Wait, I'm thinking... Currently, let's finish base connection, base world between Client and Server, and see that after.

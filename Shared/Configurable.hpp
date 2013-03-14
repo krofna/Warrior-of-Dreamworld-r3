@@ -36,14 +36,13 @@ template <class T> void Configurable::GetNextToken(std::ifstream& Config, T& Dat
 {
     if (!Config)
         throw std::runtime_error("Config stream is not open !");
-    
-    std::string p;
-    while (std::getline(Config, p) && (p[0] == '#' || p.empty()));
 
-    if (p[0] == '#' || p.empty())
-        throw std::runtime_error("End of file reached, haven't found any data.");
-    
-    Data = ToType<T>(p);
+    std::string buffer;
+    while (Config.peek() == '#')
+	Config.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    std::getline(Config, buffer, ' ');
+    Data = ToType<T>(buffer);    
 }
 
 template <class T> T Configurable::GetNextToken(std::ifstream& Config)

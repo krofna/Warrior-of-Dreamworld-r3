@@ -26,7 +26,7 @@ OpcodeHandler OpcodeTable[MSG_COUNT] =
     { "MSG_NULL",               &WorldSession::HandleNULL },
     { "MSG_PUBKEY",             &WorldSession::HandlePubkeyOpcode },
     { "MSG_LOGIN",              &WorldSession::HandleLoginOpcode },
-    { "CMSG_WINDOW_SIZE",		&WorldSession::HandleWindowSizeOpcode },
+    { "CMSG_WINDOW_SIZE",        &WorldSession::HandleWindowSizeOpcode },
     { "SMSG_ADD_OBJECT",        &WorldSession::HandleNULL },
     { "SMSG_REMOVE_OBJECT",     &WorldSession::HandleNULL },
     { "SMSG_RELOCATE_OBJECT",   &WorldSession::HandleNULL },

@@ -27,7 +27,7 @@
 class Object
 {
 public:
-	Object(WorldPacket& Packet);
+    Object(WorldPacket& Packet);
 
     uint32 GetWorldX() const   { return WorldPosition.y; }
     uint32 GetWorldY() const   { return WorldPosition.x; }

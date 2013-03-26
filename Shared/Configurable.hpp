@@ -39,7 +39,7 @@ template <class T> void Configurable::GetNextToken(std::ifstream& Config, T& Dat
 
     std::string buffer;
     while (Config.peek() == '#')
-	Config.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    Config.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     std::getline(Config, buffer, ' ');
     Data = ToType<T>(buffer);    

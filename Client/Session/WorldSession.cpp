@@ -129,8 +129,8 @@ void WorldSession::HandleLoginOpcode()
 
 void WorldSession::HandleAddObjectOpcode()
 {
-	Object* pObject = new Object(Packet);
-	Game::GetInstance()->GetTileMap()->AddObject(pObject);
+    Object* pObject = new Object(Packet);
+    Game::GetInstance()->GetTileMap()->AddObject(pObject);
 }
 
 void WorldSession::HandleRemoveObjectOpcode()

@@ -15,6 +15,9 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#ifndef MAIN_HPP
+#define MAIN_HPP
+
 #include "Shared/Singleton.hpp"
 
 #include <boost/asio.hpp>
@@ -35,5 +38,7 @@ public:
 private:
     int RetVal;
     WorldSession* pSession;
-    boost::asio::io_service& io
+    boost::asio::io_service& io;
 };
+
+#endif

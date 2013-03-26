@@ -26,13 +26,14 @@
     class WorldSession;
 #endif
 
-#define MSG_COUNT 7
+#define MSG_COUNT 8
 
 enum Opcodes
 {
     MSG_NULL,
     MSG_PUBKEY,
     MSG_LOGIN,
+    CMSG_WINDOW_SIZE,
     SMSG_ADD_OBJECT,
     SMSG_REMOVE_OBJECT,
     SMSG_RELOCATE_OBJECT,

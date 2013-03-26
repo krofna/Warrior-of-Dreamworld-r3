@@ -18,14 +18,18 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "Shared/Singleton.hpp"
+
 #include <stack>
+#include <SFML/Window/Event.hpp>
 
 class GameState;
 
 class Game : Singleton<Game>
 {
+	friend class Singleton;
+	Game();
 public:
-    Game();
     ~Game();
 
     void Update();

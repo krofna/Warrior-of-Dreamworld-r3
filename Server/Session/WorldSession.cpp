@@ -153,3 +153,7 @@ void WorldSession::HandlePubkeyOpcode()
 void WorldSession::HandleLoginOpcode()
 {
 }
+
+void WorldSession::HandleWindowSizeOpcode()
+{
+}

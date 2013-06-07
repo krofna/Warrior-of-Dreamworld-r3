@@ -43,6 +43,7 @@ public:
     void HandleNULL();
     void HandlePubkeyOpcode();
     void HandleLoginOpcode();
+    void HandleWindowSizeOpcode();
     
     Player* GetPlayer();
 private:

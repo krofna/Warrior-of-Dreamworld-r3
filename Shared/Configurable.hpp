@@ -21,28 +21,50 @@
 #include <fstream>
 #include <limits>
 #include <stdexcept>
+#include <queue>
 #include "Utility.hpp"
 
 class Configurable
 {
 public:
+    Configurable();
     virtual void LoadFromConfig(std::ifstream& Config) = 0;
 protected:
     template <class T> void GetNextToken(std::ifstream& Config, T& Data);
     template <class T> T GetNextToken(std::ifstream& Config);
+    template <class T> void GetNextToken(T& Data);
+    template <class T> T GetNextToken();
+    virtual void ReadFile(std::ifstream& Config);
+
+private:
+    bool HaveReadFile;
+    std::queue<std::string> FileContent; // Simplicity + Faster → Good.
 };
+
 
 template <class T> void Configurable::GetNextToken(std::ifstream& Config, T& Data)
 {
     if (!Config)
         throw std::runtime_error("Config stream is not open !");
+    if (!HaveReadFile)
+        ReadFile(Config);
+    
+    GetNextToken(Data);
+}
 
-    std::string buffer;
-    while (Config.peek() == '#')
-    Config.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+template <class T> void Configurable::GetNextToken(T& Data)
+{
+    std::string Token = FileContent.front();
+    FileContent.pop();
 
-    std::getline(Config, buffer, ' ');
-    Data = ToType<T>(buffer);    
+    Data = ToType<T>(Token);
+}
+
+template <class T> T Configurable::GetNextToken()
+{
+    T Data;
+    GetNextToken(Data);
+    return Data;
 }
 
 template <class T> T Configurable::GetNextToken(std::ifstream& Config)

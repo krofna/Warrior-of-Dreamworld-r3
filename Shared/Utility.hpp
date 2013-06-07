@@ -56,6 +56,14 @@ inline T ToType(std::string const& String)
     return boost::lexical_cast<T>(String);
 }
 
+inline void RemoveFromEndline(std::string& String)
+{
+    int idx = String.find('\n');
+    if (idx == std::string::npos)
+        return;
+    String.erase(String.begin() + idx, String.end());
+}
+
 inline std::pair<std::string, std::string> SplitPair(std::string const& Value, char Separator)
 {
     std::pair<std::string, std::string> Pair;

@@ -26,9 +26,10 @@ File    ("RyanLikesAnime.log")
 
 void Log::LoadFromConfig(std::ifstream& Config)
 {
-    const int amount = 6 * 2;
+    const int amount = (6 * 2) - 1;
+    GetNextToken(Config, FilterLevels[0][0]);
     for (int i = 0; i < amount; ++i)
-        GetNextToken(Config, FilterLevels[i % 2][i / 2]);
+        GetNextToken(FilterLevels[i % 2][i / 2]);
 }
 
 void Log::Flush()

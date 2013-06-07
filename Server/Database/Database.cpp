@@ -28,10 +28,10 @@ Database::~Database()
 void Database::LoadFromConfig(std::ifstream& Config)
 {
     std::string hostName = GetNextToken<std::string>(Config);
-    std::string userName = GetNextToken<std::string>(Config);
-    std::string password = GetNextToken<std::string>(Config);
+    std::string userName = GetNextToken<std::string>();
+    std::string password = GetNextToken<std::string>();
     Connection.reset(Driver->connect(hostName, userName, password));
-    Connection->setSchema(GetNextToken<std::string>(Config));
+    Connection->setSchema(GetNextToken<std::string>());
     Statement.reset(Connection->createStatement());
 }
 

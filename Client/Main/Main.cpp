@@ -27,6 +27,8 @@
  * which will give highest priority to networking, second highest to
  * animation update (see: TileMap) and lowest to Game::GetInstance()->Update
  * which basically redraws and handles input?
+ *
+ * OzVessalius: Why not ? Mmh... I'll implement that soon.
  * */
 
 Main::Main(boost::asio::io_service& io) :

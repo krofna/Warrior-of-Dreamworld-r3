@@ -154,8 +154,42 @@ void WorldSession::HandleLoginOpcode()
 {
     std::string Username;
     std::string PasswordHashed; // Hash algorithm : SHA-512
+
+    Packet >> Username;
+    Packet >> PasswordHashed;
+
+    QueryResult r = CharactersDB->PQuery("SELECT `hash` FROM `players` WHERE `username` = %s", Username);
+
+    if (!r->next())
+    {
+        SendBadLogin();
+        return;
+    }
+    std::string DB_Hash = r->getString(1);
+    if (DB_Hash == PasswordHashed)
+        SendAuthSuccess();
+    else
+        SendBadLogin();
+
+    // TODO : Create new player, etc..
 }
 
 void WorldSession::HandleWindowSizeOpcode()
 {
+}
+
+void WorldSession::SendBadLogin()
+{
+    WorldPacket LoginPckt(MSG_LOGIN);
+    LoginPckt << (uint8) 0; // failed
+
+    Send(LoginPckt);
+}
+
+void WorldSession::SendAuthSuccess()
+{
+    WorldPacket LoginPckt(MSG_LOGIN);
+    LoginPckt << (uint8) 1; // success
+
+    Send(LoginPckt);
 }

@@ -18,8 +18,13 @@
 #ifndef TILE_MAP_HPP
 #define TILE_MAP_HPP
 
-#include "Drawable.hpp"
+#include "Object.hpp"
 
+#include "Shared/BasicTypes.hpp"
+#include "Shared/Grid.hpp"
+
+#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/View.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 

@@ -18,6 +18,7 @@
 #include "WorldSession.hpp"
 #include "Shared/Log.hpp"
 #include "Shared/Opcodes.hpp"
+#include "Shared/Encryption.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/asio/write.hpp>
@@ -143,4 +144,14 @@ void WorldSession::HandleRelocateObjectOpcode()
 
 void WorldSession::HandleUpdateObjectOpcode()
 {
+}
+
+void WorldSession::SendAuth(std::string const& Username, std::string const& Password)
+{
+    Password = HashSHA512AndEncodeHex(Password);
+    WorldPacket LoginPckt(MSG_LOGIN);
+
+    LoginPckt << Username << Password;
+
+    Send(LoginPckt);
 }

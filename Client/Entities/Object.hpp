@@ -18,6 +18,7 @@
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
 
+#include "Shared/BasicTypes.hpp"
 #include "Shared/Vector2.hpp"
 #include "Shared/WorldPacket.hpp"
 
@@ -33,8 +34,8 @@ public:
     uint32 GetWorldY() const   { return WorldPosition.x; }
     uint16 GetTileX() const    { return TilePosition.x;  }
     uint16 GetTileY() const    { return TilePosition.y;  }
-    uint16 GetTextureX() const { return TexturePositions[TexPosIter].x }
-    uint16 GetTextureY() const { return TexturePositions[TexPosIter].y }
+    uint16 GetTextureX() const { return TexturePositions[TexPosIter].x; }
+    uint16 GetTextureY() const { return TexturePositions[TexPosIter].y; }
 private:
     uint8 TexPosIter; // Current frame (TexturePositions index)
     std::vector<Vector2<uint16> > TexturePositions; // All animation frames

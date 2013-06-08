@@ -44,6 +44,9 @@ public:
     void HandleRemoveObjectOpcode();
     void HandleRelocateObjectOpcode();
     void HandleUpdateObjectOpcode();
+
+    // Answer
+    void SendLogin(std::string const& Username, std::string const& Password);
 private:
     void HandleSend(const boost::system::error_code& Error);
     void HandleReceive(const boost::system::error_code& Error);

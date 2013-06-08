@@ -36,6 +36,10 @@ io        (io)
 {
     Game::CreateInstance();
     pSession = new WorldSession(io);
+
+    /* ******** [DEBUG] ****** **/
+    pSession->SendAuth("Raito", "xxxxx");
+    /* *********************** **/
 }
 
 Main::~Main()

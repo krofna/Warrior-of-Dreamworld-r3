@@ -33,3 +33,22 @@ EncryptorRSA::EncryptorRSA(RSA::PublicKey& pub, RSA::PrivateKey& priv) : publicK
 {
 
 }
+
+std::string HashSHA512AndEncodeHex(std::string const& Message)
+{
+    SHA512 hash;
+    std::string digest;
+    StringSource source(Message, true, new HashFilter(hash, new HexEncoder(new StringSink(digest))));
+
+    return digest;
+}
+
+std::string HashSHA512(std::string const& Message)
+{
+    SHA512 hash;
+    std::string digest;
+
+    StringSource source(Message, true, new HashFilter(hash, new StringSink(digest)));
+
+    return digest;
+}

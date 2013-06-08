@@ -44,6 +44,10 @@ public:
     void HandlePubkeyOpcode();
     void HandleLoginOpcode();
     void HandleWindowSizeOpcode();
+
+    // Answers
+    void SendBadLogin();
+    void SendAuthSuccess();
     
     Player* GetPlayer();
 private:

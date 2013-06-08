@@ -18,6 +18,9 @@
 
 
 #include <cryptopp/rsa.h>
+#include <cryptopp/sha.h>
+#include <cryptopp/hex.h>
+#include <cryptopp/filters.h>
 #include <cryptopp/osrng.h>
 
 using namespace CryptoPP;
@@ -35,3 +38,6 @@ class EncryptorRSA
         RSA::PrivateKey privateKey;
         RSA::PublicKey publicKey;
 };
+
+std::string HashSHA512AndEncodeHex(std::string const& Message);
+std::string HashSHA512(std::string const& Message);

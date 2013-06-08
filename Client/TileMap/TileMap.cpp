@@ -17,6 +17,8 @@
 */
 #include "TileMap.hpp"
 
+#include <fstream>
+
 TileMap::TileMap(uint16 Entry, bool FullScreen) :
 FullScreen      (FullScreen)
 {
@@ -30,8 +32,10 @@ FullScreen      (FullScreen)
 
     File >> MapWidth >> MapHeight;
     Map[MAP_FLOOR].resize(MapWidth * MapHeight * 4);
-
+    
+    std::string TilesetFileName;
     File >> TilesetFileName;
+
     States[MAP_FLOOR].texture = sObjectMgr->GetTileset(TilesetFileName);
 
     while (File >> x >> y >> tx >> ty)

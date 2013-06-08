@@ -24,7 +24,8 @@
 
 Main::Main (boost::asio::io_service& r_io) :
 io(r_io),
-HeartbeatTimer(r_io)
+HeartbeatTimer(r_io),
+nThreads(1)
 {
     World::CreateInstance();
     WorldAcceptor::CreateInstance(r_io);
@@ -89,7 +90,7 @@ void Main::WorldLoop()
     ms DeltaTime = boost::chrono::duration_cast<ms>(boost::chrono::high_resolution_clock::now() - OldTime);
     World::GetInstance()->Update(DeltaTime.count());
 
-    sLog.Write(LOG_CONSOLE, LEVEL_DEBUG, "Main::WorldLoop() for %i ms", DeltaTime.count());
+    // sLog.Write(LOG_CONSOLE, LEVEL_DEBUG, "Main::WorldLoop() for %i ms", DeltaTime.count());
     OldTime += DeltaTime;
 
     HeartbeatTimer.expires_at(HeartbeatTimer.expires_at() + boost::posix_time::milliseconds(WORLD_HEARTBEAT));

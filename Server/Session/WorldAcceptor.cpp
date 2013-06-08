@@ -33,7 +33,10 @@ Endpoint                    (boost::asio::ip::tcp::v4(), 0xBEEF) // Port value =
 void WorldAcceptor::HandleAccept(const boost::system::error_code& Error)
 {
     if(!Error)
+    {
+        sLog.Write(LEVEL_DEBUG, LOG_CONSOLE, "WorldAcceptor handles a new connection.");
         NewSession->Start();
+    }
 
     Accept();
 }

@@ -18,6 +18,9 @@
 #ifndef MAIN_MENU_HPP
 #define MAIN_MENU_HPP
 
+#include <SFGUI/SFGUI.hpp>
+#include "Window.hpp"
+
 /*
  * TODO:
  * Load placeholder image in background and render immovable
@@ -29,6 +32,27 @@
  * */
 class MainMenu
 {
+    public:
+
+    
+    private:
+        void Create();
+        void onConnectButtonPressed();
+
+    private:
+        sfg::Window::Ptr m_MainMenuWin;
+        sfg::Label::Ptr m_ServerLabel;
+        sfg::Label::Ptr m_UsernameLabel;
+        sfg::Label::Ptr m_PasswordLabel;
+
+        sfg::Entry::Ptr m_ServerEntry;
+        sfg::Entry::Ptr m_UsernameEntry;
+        sfg::Entry::Ptr m_PasswordEntry;
+
+        sfg::Button::Ptr m_ConnectButton;
+
+        sf::Clock UpdateClock;
+
 };
 
 #endif

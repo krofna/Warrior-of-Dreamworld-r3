@@ -152,6 +152,8 @@ void WorldSession::HandlePubkeyOpcode()
 
 void WorldSession::HandleLoginOpcode()
 {
+    std::string Username;
+    std::string PasswordHashed; // Hash algorithm : SHA-512
 }
 
 void WorldSession::HandleWindowSizeOpcode()

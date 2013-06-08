@@ -5,6 +5,7 @@ include(FindThreads)
 
 FIND_PACKAGE(Boost COMPONENTS system chrono REQUIRED)
 FIND_PACKAGE(MySQLConnectorCPP)
+FIND_PACKAGE(CryptoPP)
 FIND_PACKAGE(Threads)
 
 link_directories(${Boost_LIBRARY_DIRS})
@@ -47,6 +48,7 @@ SERVER_LIBS
 ${Boost_LIBRARIES}
 ${MYSQLCONNECTORCPP_LIBRARIES}
 ${CMAKE_THREAD_LIBS_INIT}
+${CRYPTOPP_LIBRARIES}
 )
 
 add_executable(Server

@@ -38,7 +38,7 @@ io        (io)
     pSession = new WorldSession(io);
 
     /* ******** [DEBUG] ****** **/
-    pSession->SendAuth("Raito", "xxxxx");
+    //pSession->SendAuth("Raito", "xxxxx");
     /* *********************** **/
 }
 

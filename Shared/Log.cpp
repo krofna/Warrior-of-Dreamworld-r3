@@ -17,19 +17,43 @@
 */
 #include "Log.hpp"
 
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
+
 Log sLog;
 
-Log::Log(/*std::string FileName*/) :
-File    ("RyanLikesAnime.log")
+Log::Log() :
+File    ("RyanLikesAnimes.log")
 {
+
 }
 
-void Log::LoadFromConfig(std::ifstream& Config)
+Log::Log(std::string const& FileName) :
+File    (FileName.c_str())
 {
-    const int amount = (6 * 2) - 1;
-    GetNextToken(Config, FilterLevels[0][0]);
-    for (int i = 0; i < amount; ++i)
-        GetNextToken(FilterLevels[i % 2][i / 2]);
+
+}
+
+void Log::Load(std::string const& ConfigSection)
+{
+    const int amount = (6 * 2);
+    for (int i = 0; i < amount; i += 2)
+    {
+        std::vector<std::string> Pair;
+        std::string Filter = Filters[i / 2];
+        std::string StringLogConfig = ConfigSystem::GetInstance()->GetValue<std::string>(ConfigSection, Filter);
+        boost::algorithm::split(Pair, StringLogConfig, boost::algorithm::is_any_of(";"));
+
+        try
+        {
+            FilterLevels[i % 2][i / 2] = ToType<uint8>(Pair.at(0));
+            FilterLevels[(i + 1) % 2][(i + 1) / 2] = ToType<uint8>(Pair.at(1));
+        }
+        catch (std::out_of_range const& ex)
+        {
+            std::cerr << "[Log Init] : Malformed config file." << std::endl;
+        }
+    }
 }
 
 void Log::Flush()

@@ -49,16 +49,19 @@ void Main::Load(int argc, char** argv)
         }
     }
 
-
-    std::ifstream WorldFile("WorldServer.conf");
-    std::ifstream LogFile("LogConfig.conf");
+    
+    // Config system init
+    ConfigSystem::CreateInstance();
+    ConfigSystem::GetInstance()->Load("LogConfig.conf");
+    ConfigSystem::GetInstance()->Load("WorldServer.conf");
 
     // Log init
-    sLog.LoadFromConfig(LogFile);
+    sLog.Load("Logging");
    
     // Database init
-    DatabaseFactory::GetInstance()->CreateDatabase("World", WorldFile);
-    DatabaseFactory::GetInstance()->CreateDatabase("Characters", WorldFile);
+    DatabaseFactory::CreateInstance();
+    DatabaseFactory::GetInstance()->CreateDatabase("World", "Databases");
+    DatabaseFactory::GetInstance()->CreateDatabase("Characters", "Databases");
 
     // World init
     World::GetInstance()->Load();

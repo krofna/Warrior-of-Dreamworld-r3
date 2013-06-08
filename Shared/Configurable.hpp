@@ -21,57 +21,58 @@
 #include <fstream>
 #include <limits>
 #include <stdexcept>
-#include <queue>
+#include <map>
+#include <boost/variant.hpp>
+#include <boost/variant/get.hpp>
 #include "Utility.hpp"
+#include "Singleton.hpp"
 
 class Configurable
 {
 public:
-    Configurable();
-    virtual void LoadFromConfig(std::ifstream& Config) = 0;
-protected:
-    template <class T> void GetNextToken(std::ifstream& Config, T& Data);
-    template <class T> T GetNextToken(std::ifstream& Config);
-    template <class T> void GetNextToken(T& Data);
-    template <class T> T GetNextToken();
-    virtual void ReadFile(std::ifstream& Config);
-
-private:
-    bool HaveReadFile;
-    std::queue<std::string> FileContent; // Simplicity + Faster → Good.
+    virtual void Load(std::string const& ConfigSection) = 0;
 };
 
-
-template <class T> void Configurable::GetNextToken(std::ifstream& Config, T& Data)
+class ConfigSystem : public Singleton<ConfigSystem>
 {
-    if (!Config)
-        throw std::runtime_error("Config stream is not open !");
-    if (!HaveReadFile)
-        ReadFile(Config);
+    friend class Singleton<ConfigSystem>;
+    typedef boost::variant<char, int, double, float, std::string> ConfigValue; // TODO : Extend to custom types if needed.
+    ConfigSystem();
+    public:
+
+        void Load(std::string const& FileName);
+
+        std::vector<std::string> GetSections() const;
+        std::vector<std::string> GetKeysFromSection(std::string const& Section) const;
+
+        template <class T> 
+        T GetValue(std::string const& Section, std::string const& Key) const;
+
+        bool SectionExist(std::string const& Section) const;
+        bool KeyExist(std::string const& Section, std::string const& Key) const;
+
+    private:
+        void ReadFile(std::string const& FileName);
+        void AddSection(std::string const& Section);
+        void AddConfigPair(std::string const& Section, std::string const& Key, std::string const& Value);
     
-    GetNextToken(Data);
-}
+    private:
+        std::vector<std::string> Sections;
+        std::map<std::string, std::map<std::string, ConfigValue> > Values;
+};
 
-template <class T> void Configurable::GetNextToken(T& Data)
+template <class T>
+T ConfigSystem::GetValue(std::string const& Section, std::string const& Key) const
 {
-    std::string Token = FileContent.front();
-    FileContent.pop();
-
-    Data = ToType<T>(Token);
+    if (SectionExist(Section) && KeyExist(Section, Key))
+    {
+        auto it = Values.find(Section);
+        ConfigValue v = it->second.find(Key)->second;        
+        return boost::get<T>(v);
+    }
+    else
+        throw std::runtime_error("Unknown or invalid section or key.");
 }
 
-template <class T> T Configurable::GetNextToken()
-{
-    T Data;
-    GetNextToken(Data);
-    return Data;
-}
-
-template <class T> T Configurable::GetNextToken(std::ifstream& Config)
-{
-    T Data;
-    GetNextToken(Config, Data);
-    return Data;
-}
 
 #endif

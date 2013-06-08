@@ -43,7 +43,8 @@ public:
     Database();
     ~Database();
 
-    void LoadFromConfig(std::ifstream& Config);
+    void Load(std::string const& ConfigSection);
+    void SetConfig(std::string const& Name);
 
     void Execute(const char* Sql);
     QueryResult Query(const char* Sql);
@@ -56,6 +57,8 @@ private:
     ConnectionPtr Connection;
     StatementPtr Statement;
     PStatementPtr PStatement;
+
+    std::string ConfigName;
 };
 
 template<typename... Values> void Database::PExecute(std::string const& Sql, Values... Vals)
@@ -73,7 +76,7 @@ class DatabaseFactory : public Singleton<DatabaseFactory>
     friend class Singleton<DatabaseFactory>;
     DatabaseFactory() = default;
     public:
-    bool CreateDatabase(std::string const& Name, std::ifstream& Config);
+    bool CreateDatabase(std::string const& Name, std::string const& ConfigSection);
     void RemoveDatabase(std::string const& Name);
 
     std::shared_ptr<Database> Get(std::string const& Name) const;

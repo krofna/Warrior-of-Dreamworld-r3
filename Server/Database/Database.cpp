@@ -16,6 +16,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "Database.hpp"
+#include "Shared/Log.hpp"
+
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
 
 Database::Database() : Driver(get_driver_instance())
 {
@@ -25,14 +29,28 @@ Database::~Database()
 {
 }
 
-void Database::LoadFromConfig(std::ifstream& Config)
+void Database::Load(std::string const& ConfigSection)
 {
-    std::string hostName = GetNextToken<std::string>(Config);
-    std::string userName = GetNextToken<std::string>();
-    std::string password = GetNextToken<std::string>();
+    std::string DatabaseConfigLine = ConfigSystem::GetInstance()->GetValue<std::string>(ConfigSection, ConfigName);
+
+    std::vector<std::string> SubStrings;
+    boost::algorithm::split(SubStrings, DatabaseConfigLine, boost::algorithm::is_any_of(";"));
+
+    std::string hostName = SubStrings[0];
+    std::string userName = SubStrings[1];
+    std::string password = SubStrings[2];
+    std::string databaseName = SubStrings[3];
+
     Connection.reset(Driver->connect(hostName, userName, password));
-    Connection->setSchema(GetNextToken<std::string>());
+    Connection->setSchema(databaseName);
     Statement.reset(Connection->createStatement());
+
+    sLog.Write(LEVEL_DEBUG, LOG_CONSOLE, "Connection %s@%s with password : %s - Database %s", hostName, userName, password, databaseName); 
+}
+
+void Database::SetConfig(std::string const& Name)
+{
+    ConfigName = Name;
 }
 
 void Database::Execute(const char* Sql)
@@ -53,10 +71,11 @@ uint64 Database::GenerateGUID()
     return result->getUInt64(1);
 }
 
-bool DatabaseFactory::CreateDatabase(std::string const& Name, std::ifstream& Config)
+bool DatabaseFactory::CreateDatabase(std::string const& Name, std::string const& ConfigSection)
 {
     m_Databases[Name] = std::make_shared<Database>();
-    m_Databases[Name]->LoadFromConfig(Config);
+    m_Databases[Name]->SetConfig(Name);
+    m_Databases[Name]->Load(ConfigSection);
     
     return true; // TODO: Test if the connection have been made.
 }

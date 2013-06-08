@@ -19,7 +19,8 @@
 
 MainMenu::~MainMenu()
 {
-
+    Window::GetInstance()->resetGLStates();
+    Create();
 }
 
 
@@ -35,7 +36,7 @@ void MainMenu::Update()
 
 void MainMenu::Draw()
 {
-
+    sSFGUI->Display(*Window::GetInstance());
 }
 
 void MainMenu::Create()

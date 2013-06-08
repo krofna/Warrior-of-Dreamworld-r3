@@ -21,6 +21,7 @@
 
 Game::Game()
 {
+    Window::CreateInstance();
 }
 
 Game::~Game()

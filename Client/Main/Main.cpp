@@ -39,6 +39,7 @@ io        (io)
     ObjectMgr::CreateInstance();
     Game::CreateInstance();
     pSession = new WorldSession(io);
+    sSFGUI = new sfg::SFGUI;
 
     /* ******** [DEBUG] ****** **/
     //pSession->SendAuth("Raito", "xxxxx");

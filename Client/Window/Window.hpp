@@ -20,9 +20,13 @@
 
 #include "Shared/Singleton.hpp"
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFGUI/SFGUI.hpp>
 
 class Window : public sf::RenderWindow, public Singleton<Window>
 {
+    friend class Singleton<Window>;
+    Window();
 };
 
+extern sfg::SFGUI* sSFGUI;
 #endif

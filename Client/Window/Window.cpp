@@ -16,3 +16,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "Window.hpp"
+
+sfg::SFGUI* sSFGUI = nullptr;
+
+Window::Window()
+{
+
+}

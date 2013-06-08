@@ -17,6 +17,7 @@
 */
 #include "Main.hpp"
 #include "Game.hpp"
+#include "MainMenu.hpp"
 #include "ObjectMgr.hpp"
 #include "WorldSession.hpp"
 
@@ -55,6 +56,7 @@ void Main::Load(int argc, char** argv)
 
 void Main::Run()
 {
+    Game::GetInstance()->PushState(new MainMenu);
 }
 
 int Main::GetRetVal() const

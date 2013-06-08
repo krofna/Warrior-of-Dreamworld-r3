@@ -17,6 +17,27 @@
 */
 #include "MainMenu.hpp"
 
+MainMenu::~MainMenu()
+{
+
+}
+
+
+void MainMenu::HandleEvent(sf::Event Event)
+{
+
+}
+
+void MainMenu::Update()
+{
+
+}
+
+void MainMenu::Draw()
+{
+
+}
+
 void MainMenu::Create()
 {
     m_MainMenuWin = sfg::Window::Create();

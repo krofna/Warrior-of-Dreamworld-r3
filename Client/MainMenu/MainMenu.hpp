@@ -20,7 +20,7 @@
 
 #include <SFGUI/SFGUI.hpp>
 #include "Window.hpp"
-
+#include "GameState.hpp"
 /*
  * TODO:
  * Load placeholder image in background and render immovable
@@ -30,10 +30,13 @@
  * @Krofna will deal with abstract design and @OzVessalius should fill in
  * implementations of MainMenu functions
  * */
-class MainMenu
+class MainMenu : public GameState
 {
     public:
-
+        virtual ~MainMenu();
+        void HandleEvent(sf::Event Event);
+        void Update();
+        void Draw();        
     
     private:
         void Create();

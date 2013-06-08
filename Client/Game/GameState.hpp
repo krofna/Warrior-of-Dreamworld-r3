@@ -23,7 +23,7 @@
 class GameState
 {
 public:
-    virtual ~GameState() = 0;
+    virtual ~GameState() { }
     virtual void HandleEvent(sf::Event Event) = 0;
     virtual void Update() = 0;
     virtual void Draw() = 0;

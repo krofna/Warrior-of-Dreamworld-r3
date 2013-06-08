@@ -27,6 +27,12 @@ struct Vector2
     bool operator==(const Vector2<T>& Other);
     bool operator!=(Vector2<T>& Other);
     void operator=(Vector2<T> New);
+    template<typename U>
+    void operator=(Vector2<U> New)
+    {
+        x = New.x;
+        y = New.y;
+    }
 
     T x;
     T y;

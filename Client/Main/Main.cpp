@@ -17,6 +17,7 @@
 */
 #include "Main.hpp"
 #include "Game.hpp"
+#include "ObjectMgr.hpp"
 #include "WorldSession.hpp"
 
 /*
@@ -28,12 +29,13 @@
  * animation update (see: TileMap) and lowest to Game::GetInstance()->Update
  * which basically redraws and handles input?
  *
- * OzVessalius: Why not ? Mmh... I'll implement that soon.
+ * OzVessalius: Why not ? Mmh... I'll implement that soon. EDIT : Implemented.
  * */
 
 Main::Main(boost::asio::io_service& io) :
 io        (io)
 {
+    ObjectMgr::CreateInstance();
     Game::CreateInstance();
     pSession = new WorldSession(io);
 

@@ -36,6 +36,7 @@ public:
     uint16 GetTileY() const    { return TilePosition.y;  }
     uint16 GetTextureX() const { return TexturePositions[TexPosIter].x; }
     uint16 GetTextureY() const { return TexturePositions[TexPosIter].y; }
+    Vector2<uint32> GetPosition() const { return WorldPosition; }
 private:
     uint8 TexPosIter; // Current frame (TexturePositions index)
     std::vector<Vector2<uint16> > TexturePositions; // All animation frames

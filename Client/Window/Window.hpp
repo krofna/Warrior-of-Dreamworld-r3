@@ -18,9 +18,10 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
+#include "Shared/Singleton.hpp"
 #include <SFML/Graphics/RenderWindow.hpp>
 
-class Window : public sf::Window, public Singleton<Window>
+class Window : public sf::RenderWindow, public Singleton<Window>
 {
 };
 

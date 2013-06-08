@@ -19,6 +19,7 @@
 #define TILE_MAP_HPP
 
 #include "Object.hpp"
+#include "ObjectMgr.hpp"
 
 #include "Shared/BasicTypes.hpp"
 #include "Shared/Grid.hpp"

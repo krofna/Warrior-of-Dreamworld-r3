@@ -26,7 +26,7 @@ class WorldSession;
 
 class Main : public Singleton<Main>
 {
-    friend class Singleton;
+    friend class Singleton<Main>;
     Main(boost::asio::io_service& io);
 public:
     ~Main();

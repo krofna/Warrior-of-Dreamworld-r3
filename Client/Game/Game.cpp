@@ -17,6 +17,7 @@
 */
 #include "Game.hpp"
 #include "GameState.hpp"
+#include "Window.hpp"
 
 Game::Game()
 {
@@ -29,7 +30,7 @@ Game::~Game()
 
 void Game::Update()
 {
-    while (Window.pollEvent(Event))
+    while (Window::GetInstance()->pollEvent(Event))
         StateStack.top()->HandleEvent(Event);
 
     Window::GetInstance()->clear();

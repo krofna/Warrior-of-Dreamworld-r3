@@ -130,8 +130,8 @@ void WorldSession::HandleLoginOpcode()
 
 void WorldSession::HandleAddObjectOpcode()
 {
-    Object* pObject = new Object(Packet);
-    Game::GetInstance()->GetTileMap()->AddObject(pObject);
+    //Object* pObject = new Object(Packet);
+    //Game::GetInstance()->GetTileMap()->AddObject(pObject);
 }
 
 void WorldSession::HandleRemoveObjectOpcode()
@@ -146,12 +146,12 @@ void WorldSession::HandleUpdateObjectOpcode()
 {
 }
 
-void WorldSession::SendAuth(std::string const& Username, std::string const& Password)
+void WorldSession::SendLogin(std::string const& Username, std::string const& Password)
 {
-    Password = HashSHA512AndEncodeHex(Password);
+    std::string Hash = HashSHA512AndEncodeHex(Password);
     WorldPacket LoginPckt(MSG_LOGIN);
 
-    LoginPckt << Username << Password;
+    LoginPckt << Username << Hash;
 
     Send(LoginPckt);
 }

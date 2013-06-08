@@ -25,9 +25,9 @@
 
 class GameState;
 
-class Game : Singleton<Game>
+class Game : public Singleton<Game>
 {
-    friend class Singleton;
+    friend class Singleton<Game>;
     Game();
 public:
     ~Game();

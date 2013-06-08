@@ -19,10 +19,16 @@
 
 #include <fstream>
 
+/* ********
+ *
+ * This need really to be adapted. Because, there is a lot wtf for me. You use Insert(Vector2<uint16>) for Object, but, I don't really understand the point of this.
+ * Can you fix that ?
+ */
+
 TileMap::TileMap(uint16 Entry, bool FullScreen) :
 FullScreen      (FullScreen)
 {
-    std::string Path = "Data/Maps/Map" + ToString(Entry) + ".map";
+/*    std::string Path = "Data/Maps/Map" + ToString(Entry) + ".map";
 
     std::ifstream File(Path);
     assert(File);
@@ -36,7 +42,7 @@ FullScreen      (FullScreen)
     std::string TilesetFileName;
     File >> TilesetFileName;
 
-    States[MAP_FLOOR].texture = sObjectMgr->GetTileset(TilesetFileName);
+    States[MAP_FLOOR].texture = ObjectMgr::GetInstance()->GetTileset(TilesetFileName);
 
     while (File >> x >> y >> tx >> ty)
     {
@@ -53,11 +59,12 @@ FullScreen      (FullScreen)
         index += 4;
     }
 
-    Map[MAP_OBJECT].resize((Window::GetInstance()->getSize().x / TILE_SIZE) * (Window::GetInstance()->getSize().y / TILE_SIZE) * 4);
+    Map[MAP_OBJECT].resize((Window::GetInstance()->getSize().x / TILE_SIZE) * (Window::GetInstance()->getSize().y / TILE_SIZE) * 4); */
 }
 
 void TileMap::HandleEvent(sf::Event Event)
 {
+    /*
     if (FullScreen)
     {
         if (Event.type == sf::Event::MouseMoved)
@@ -76,11 +83,12 @@ void TileMap::HandleEvent(sf::Event Event)
             else if (sf::Mouse::getPosition(*Window::GetInstance()).y < TILE_SIZE / 2)
                 MoveCamera |= MOVE_UP;
         }
-    }
+    }*/
 }
 
 void TileMap::Draw()
 {
+    /*
     if (FullScreen)
     {
         if (MoveCamera != MOVE_STOP)
@@ -95,7 +103,7 @@ void TileMap::Draw()
             else if (MoveCamera & MOVE_DOWN && CameraBottom < MapHeight)
             {
                 ++CameraTop;
-                ++CameraBotto;
+                ++CameraBottom;
                 Camera.move(0, TILE_SIZE);
             }
 
@@ -117,12 +125,14 @@ void TileMap::Draw()
         }
     }
     Window::GetInstance()->draw(Map[MAP_FLOOR], States[MAP_FLOOR]);
-    Window::GetInstance()->draw(Map[MAP_OBJECT], States[MAP_OBJECT]);
+    Window::GetInstance()->draw(Map[MAP_OBJECT], States[MAP_OBJECT]); */
 }
 
 void TileMap::RemoveObject(Object* pObject)
 {
-    MapObjects.Remove(pObject->GetPosition());
+    /*
+    Vector2<uint16> Pos = pObject->GetPosition();
+    MapObjects.Remove(Pos);*/
 }
 
 void TileMap::AddObject(Object* pObject)
@@ -132,6 +142,7 @@ void TileMap::AddObject(Object* pObject)
 
 void TileMap::BuildObjectMap()
 {
+    /*
     // Construct Map[MAP_OBJECT] from MapObjects in current camera range
     // Should be called whenever animations need to be updated
     Map[MAP_OBJECT].clear();
@@ -140,7 +151,7 @@ void TileMap::BuildObjectMap()
     {
         for (uint16 x = CameraLeft; x < (CameraRight > MapWidth ? MapWidth : CameraRight); ++x)
         {
-            if (Object* pObject = MapObjects.At(x, y)
+            if (Object* pObject = MapObjects.At(x, y))
             {
                 // Object arrived to tile
                 if (pObject->GetWorldX() % 32 == 0 &&
@@ -165,5 +176,5 @@ void TileMap::BuildObjectMap()
                 MapIter += 4;
             }
         }
-    }
+    }*/
 }

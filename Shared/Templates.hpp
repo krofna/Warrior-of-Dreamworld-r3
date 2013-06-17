@@ -27,8 +27,8 @@ struct ObjectTemplate
     uint32 Entry;
     std::string Name;
     std::string Tileset;
-    uint16 TextureX;
-    uint16 TextureY;
+    uint8 TextureX;
+    uint8 TextureY;
 };
 
 struct WorldObjectTemplate : ObjectTemplate

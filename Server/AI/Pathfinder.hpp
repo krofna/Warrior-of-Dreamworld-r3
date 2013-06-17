@@ -31,7 +31,7 @@ class Unit;
 class Pathfinder : public Singleton<Pathfinder>
 {
     friend class Singleton;
-    Pathfinder();
+
 public:
     static void Initialize();
     ~Pathfinder();
@@ -47,9 +47,15 @@ public:
         Vector2<uint16> Position;
         Node* pParent;
         uint16 Cost;
-        uint8 Color;
+        uint16 Color;
     };
+
 private:
+    Pathfinder();
+
+    void ResetPathfinderGrid();
+    void Relax(Node* pFirst, Node* pSecond, uint16 Cost, std::priority_queue<Node*>& OpenList);
+
     struct Work
     {
         Unit* pMe;
@@ -60,16 +66,13 @@ private:
     Work* pWork;
     std::queue<Work*> WorkQueue;
     std::mutex WorkMutex;
-
-    enum
-    {
-        WHITE   = 1,
-        GRAY    = 2,
-        BLACK   = 3
-    };
-
+    
+    /* 1)
+     * OLDWHITE  OLDGRAY   OLDBLACK  <-- WHITE |GRAY  BLACK ...
+     * 0,        1,        2,        <-- WHITE |3,    4,    ...
+    */
+    uint16 WHITE, GRAY, BLACK;
     Grid<Node> PathfinderGrid;
-    void Relax(Node* pFirst, Node* pSecond, uint16 Cost, std::priority_queue<Node*>& OpenList);
 };
 
 #endif

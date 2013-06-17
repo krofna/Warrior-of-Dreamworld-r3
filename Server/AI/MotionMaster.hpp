@@ -43,7 +43,7 @@ public:
     void Update(uint32 diff);
 private:
     std::stack<Vector2<uint16> >* pPath;
-    std::mutex PathMutex;
+    std::mutex PathMutex; // ??
     uint8 MotionStatus;
     Unit* pMe;
 };

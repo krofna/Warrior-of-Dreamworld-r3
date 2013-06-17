@@ -1,6 +1,6 @@
 /*
     Warrior of Dreamworld, 2D Massivly Mutiplayer Online Role-playing Game
-    Copyright (C) 2012-2013 Mislav Blazevic
+    Copyright (C) 2013 Mislav Blazevic, Ryan Lahfa
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -15,45 +15,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "Map.hpp"
-#include "Shared/ObjectHolder.hpp"
-#include "WorldSession.hpp"
+#include "Object.hpp"
 
-#include <boost/bind.hpp>
-
-Map* Map::Factory::Load(QueryResult Result)
+Object::Object(WorldPacket& Packet)
 {
-    // TODO: Do Something With Result
-    return nullptr;
-}
-
-Map::Map()
-{
-}
-
-void Map::Update(uint32 diff)
-{
-}
-
-void Map::EnqueuePlayerUpdate(WorldPacket& Data)
-{
-    PacketsForPlayers.push_back(Data);
-}
-
-void Map::SendUpdate(WorldSession* pSession)
-{
-    ObjectContainer::SendUpdate(pSession);
-    std::for_each(PacketsForPlayers.begin(), PacketsForPlayers.end(), boost::bind(&WorldSession::Send, pSession, _1));
-}
-
-Object* Map::At(Vector2<uint16> Pos)
-{
-}
-
-void Map::Insert(Object* pObject)
-{
-}
-
-void Map::Remove(Object* pObject)
-{
+    // Texture file identifier
+    // Object entry
+    // Object GUID
+    // ...
 }

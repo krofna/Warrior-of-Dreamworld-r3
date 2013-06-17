@@ -32,15 +32,15 @@ public:
 
     // TODO : Fix these functions. Placeholders.
     uint8 GetSecLevel() { return 0; }
-    void Kill() { }
+    void Kill() { } // RIP
     void Kick() { } // BOOMO
     void SendCommandReponse(std::string const& Message) { }
-    void Teleport(Map* pMap, Vector2<uint16> const& pos) { }
+    void Teleport(Map* pMap, Vector2<uint16> const pos) { }
     void Teleport(Map* pMap, uint16 x, uint16 y) { }
     bool IsInWorld() const { return true; }
     void LogOut() { }
     
-    // This will all pending packets to client
+    // This will send all pending packets to client
     void SendUpdate();
 
 protected:

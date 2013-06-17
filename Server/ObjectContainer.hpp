@@ -18,22 +18,50 @@
 #ifndef OBJECT_CONTAINER_HPP
 #define OBJECT_CONTAINER_HPP
 
-#include "Shared/Grid.hpp"
-#include "Object.hpp"
-#include "WorldSession.hpp"
+#include "Shared/Vector2.hpp"
+#include "Shared/WorldPacket.hpp"
 
-class ObjectContainer : public Grid<Object>
+class WorldSession;
+class Map;
+class Object;
+
+// Base class for Bag and Map
+class ObjectContainer
 {
 public:
-    ObjectContainer() : ObjectUpdateGUID(static_cast<uint64>(-1)) { }
+    ObjectContainer();
 
+    // Appends Data to be updated in Field for GUID object
     template <class T>
     void ObjectUpdateField(uint64 GUID, uint8 Field, T Data);
+    
+    // Actually sends Object Update
+    void SendUpdate(WorldSession* pSession);
+    
+    // Unsafe downcast
+    Map* ToMap() { return (Map*)this; }
+    // Bag* ToBag() { return (Bag*)this; }
 
-    virtual void SendUpdate(WorldSession* pSession);
+    // Returns WorldObject at Pos
+    virtual Object* At(Vector2<uint16> Pos) = 0;
+
+    // Inserts object into container
+    virtual void Insert(Object* pObject) = 0;
+
+    // Removes object from map
+    virtual void Remove(Object* pObject) = 0;
+    
+    Vector2<uint16> GetSize() const;
+    
 private:
-    uint64 ObjectUpdateGUID;
+    // Size of the container
+    Vector2<uint16> Size;
+
+    // Packet containing Object Updates
     WorldPacket ObjectUpdatePckt;
+    
+    // Current object appending its fields for update
+    uint64 ObjectUpdateGUID;
 };
 
 template <class T>
@@ -42,7 +70,7 @@ void ObjectContainer::ObjectUpdateField(uint64 GUID, uint8 Field, T Data)
     if (ObjectUpdateGUID != GUID)
     {
         ObjectUpdateGUID = GUID;
-        ObjectUpdatePckt << GUID << uint8(0);
+        ObjectUpdatePckt << GUID << uint8(0); // GUID & Num fields to update for this GUID
     }
     uint8* FieldNumPtr = ObjectUpdatePckt.GetDataWithoutHeader() + ObjectUpdatePckt.GetSizeWithoutHeader() - sizeof(uint8);
     (*FieldNumPtr)++;

@@ -24,24 +24,27 @@
 
 #include <vector>
 
+namespace sf
+{
+    class Texture;
+};
+
 // Keep in mind that spells are valid objects as well on client side!
 class Object
 {
 public:
     Object(WorldPacket& Packet);
 
-    uint32 GetWorldX() const   { return WorldPosition.y; }
-    uint32 GetWorldY() const   { return WorldPosition.x; }
-    uint16 GetTileX() const    { return TilePosition.x;  }
-    uint16 GetTileY() const    { return TilePosition.y;  }
+    uint16 GetPosX() const { return Position.y; }
+    uint16 GetPosY() const { return Position.x; }
     uint16 GetTextureX() const { return TexturePositions[TexPosIter].x; }
     uint16 GetTextureY() const { return TexturePositions[TexPosIter].y; }
-    Vector2<uint32> GetPosition() const { return WorldPosition; }
+    Vector2<uint16> GetPosition() const { return Position; }
 private:
+    sf::Texture* pTexture; // Pointer to texture with animation
     uint8 TexPosIter; // Current frame (TexturePositions index)
-    std::vector<Vector2<uint16> > TexturePositions; // All animation frames
-    Vector2<uint16> TilePosition; // Server side position
-    Vector2<uint32> WorldPosition; // Actual position (e.g. between 2 tiles)
+    std::vector<Vector2<uint8> > TexturePositions; // All animation frames (tx, ty)
+    Vector2<uint16> Position; // Position in World relative to map
     uint64 GUID; // Server-side globally unique identifier
     uint32 Entry; // Identifier unique to specific ObjectMask
     uint8 ObjectMask; // Type of the object

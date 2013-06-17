@@ -18,21 +18,24 @@
 #include "Pathfinder.hpp"
 #include "MotionMaster.hpp"
 #include "Unit.hpp"
-#include "ObjectContainer.hpp"
+#include "Map.hpp"
 #include "Shared/Log.hpp"
 
 #include <stack>
 #include <limits>
 
-#define MAX_MAP_HEIGHT 50
-#define MAX_MAP_WIDTH 50
+const int MAX_MAP_HEIGHT = std::numeric_limits<uint16>::max();
+const int MAX_MAP_WIDTH = std::numeric_limits<uint16>::max();
 
 void Pathfinder::Initialize()
 {
     Pathfinder::CreateInstance();
 }
 
-Pathfinder::Pathfinder()
+Pathfinder::Pathfinder( ) :
+WHITE                 (0),
+GRAY                  (1),
+BLACK                 (2)
 {
     pWork = nullptr;
     PathfinderGrid.Allocate(MAX_MAP_WIDTH, MAX_MAP_HEIGHT);
@@ -59,6 +62,13 @@ Pathfinder::~Pathfinder()
     PathfinderGrid.Deallocate();
 }
 
+void Pathfinder::ResetPathfinderGrid()
+{
+    for (uint16 y = 0; y < MAX_MAP_HEIGHT; ++y)
+        for (uint16 x = 0; x < MAX_MAP_WIDTH; ++x)
+            PathfinderGrid.At(x, y)->Reset();
+}
+
 void Pathfinder::Enqueue(MotionMaster* pMotionMaster, Vector2<uint16> Origin, Vector2<uint16> Target)
 {
     Work* pJob = new Work;
@@ -66,7 +76,6 @@ void Pathfinder::Enqueue(MotionMaster* pMotionMaster, Vector2<uint16> Origin, Ve
     pJob->Origin = Origin;
     pJob->Target = Target;
     pJob->pMe = pMotionMaster->pMe;
-
     WorkMutex.lock();
     WorkQueue.push(pJob);
     WorkMutex.unlock();
@@ -80,7 +89,6 @@ void Pathfinder::ProcessAll()
         pWork = WorkQueue.front();
         WorkQueue.pop();
         WorkMutex.unlock();
-
         GeneratePath();
         delete pWork;
     }
@@ -88,15 +96,17 @@ void Pathfinder::ProcessAll()
 
 void Pathfinder::Relax(Node* pFirst, Node* pSecond, uint16 Cost, std::priority_queue<Node*>& OpenList)
 {
-    if (pWork->pMe->GetContainer()->At(pSecond->Position.x, pSecond->Position.y))
+    // Collision check
+    Map* pMap = pWork->pMe->GetContainer()->ToMap();
+    if (pMap->At(pSecond->Position))
         return;
 
-    if (pSecond->Cost > pFirst->Cost + Cost)
+    if (pSecond->Color < GRAY || pSecond->Cost > pFirst->Cost + Cost)
     {
         pSecond->Cost = pFirst->Cost + Cost;
         pSecond->pParent = pFirst;
 
-        if (pSecond->Color == WHITE)
+        if (pSecond->Color < GRAY) // < GRAY means WHITE
         {
             pSecond->Color = GRAY;
             OpenList.push(pSecond);
@@ -112,11 +122,15 @@ void Pathfinder::GeneratePath()
 {
     std::stack<Vector2<uint16> >* pPath = new std::stack<Vector2<uint16> >;
 
-    Grid<Object>* pGrid = dynamic_cast<Grid<Object>* >(pWork->pMe->GetContainer());
+    Map* pMap = pWork->pMe->GetContainer()->ToMap();
+    uint16 SizeX = pMap->GetSize().x * 32;
+    uint16 SizeY = pMap->GetSize().y * 32;
 
-    for (uint16 y = 0; y < MAX_MAP_HEIGHT; ++y)
-        for (uint16 x = 0; x < MAX_MAP_WIDTH; ++x)
-            PathfinderGrid.At(x, y)->Reset();
+    if (BLACK > 0xFFFA)
+        ResetPathfinderGrid();
+
+    GRAY += 2;
+    BLACK += 2;
 
     Node* pCurrent = PathfinderGrid.At(pWork->Origin.x, pWork->Origin.y);
     pCurrent->Color = GRAY;
@@ -146,13 +160,13 @@ void Pathfinder::GeneratePath()
         }
 
         // Right
-        if (pCurrent->Position.x < pGrid->GetSizeX()-1)
+        if (pCurrent->Position.x < SizeX-1)
             Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y, pCurrent->Position.x+1), 10, OpenList);
         // Low
-        if (pCurrent->Position.y < pGrid->GetSizeY()-1)
+        if (pCurrent->Position.y < SizeY-1)
             Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y+1, pCurrent->Position.x), 10, OpenList);
         // Right-low
-        if (pCurrent->Position.x < pGrid->GetSizeX()-1 && pCurrent->Position.y < pGrid->GetSizeY()-1)
+        if (pCurrent->Position.x < SizeX-1 && pCurrent->Position.y < SizeY-1)
             Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y+1, pCurrent->Position.x+1), 14, OpenList);
         // Left
         if (pCurrent->Position.x > 0)
@@ -164,10 +178,10 @@ void Pathfinder::GeneratePath()
         if (pCurrent->Position.x > 0 && pCurrent->Position.y > 0)
             Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y-1, pCurrent->Position.x-1), 14, OpenList);
         // Left-low
-        if (pCurrent->Position.x > 0 && pCurrent->Position.y < pGrid->GetSizeY()-1)
+        if (pCurrent->Position.x > 0 && pCurrent->Position.y < SizeY-1)
             Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y+1, pCurrent->Position.x-1), 14, OpenList);
         // Right-high
-        if (pCurrent->Position.x < pGrid->GetSizeX()-1 && pCurrent->Position.y > 0)
+        if (pCurrent->Position.x < SizeX-1 && pCurrent->Position.y > 0)
             Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y-1, pCurrent->Position.x+1), 14, OpenList);
         
         pCurrent->Color = BLACK;
@@ -182,5 +196,5 @@ void Pathfinder::Node::Reset()
 {
     Cost = std::numeric_limits<uint16>::max();
     pParent = nullptr;
-    Color = WHITE;
+    Color = 0;
 }

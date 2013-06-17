@@ -25,6 +25,7 @@
 class Window : public sf::RenderWindow, public Singleton<Window>
 {
     friend class Singleton<Window>;
+public:
     Window();
 };
 

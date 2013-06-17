@@ -82,7 +82,7 @@ public:
     std::string GetName() const;
     uint64 GetGUID() const;
     Vector2<uint16> GetPosition() const;
-    ObjectContainer* GetContainer();
+    ObjectContainer* GetContainer() const;
 
     void Relocate(Vector2<uint16>& Where);
 
@@ -94,8 +94,8 @@ protected:
     uint8 ObjectMask;
     uint64 GUID;
     std::string Name;
-    ObjectContainer* pContainer;
     ObjectTemplate* pTemplate;
+    ObjectContainer* pContainer;
     Vector2<uint16> Pos;
 };
 

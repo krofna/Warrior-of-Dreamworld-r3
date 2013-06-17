@@ -48,6 +48,4 @@ private:
     static std::unordered_map<uint64, Player* > PlayerMap;
 };
 
-
-
 #endif

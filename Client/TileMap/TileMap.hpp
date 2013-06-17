@@ -29,21 +29,6 @@
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 
-enum
-{
-    MOVE_STOP   = 0,
-    MOVE_UP     = 1,
-    MOVE_DOWN   = 2,
-    MOVE_LEFT   = 4,
-    MOVE_RIGHT  = 8
-};
-
-enum
-{
-    MAP_FLOOR   = 0,
-    MAP_OBJECT  = 1
-};
-
 /*
  * TODO:
  * Fragment into chunks:
@@ -55,14 +40,13 @@ enum
 class TileMap
 {
 public:
+    // Loads texture
     TileMap(uint16 Entry, bool FullScreen);
-
-    void BuildObjectMap();
 
     void HandleEvent(sf::Event Event);
     void Draw();
 
-    void RemoveObject(Object* pObject);
+    void RemoveObject(uint64 GUID);
     void AddObject(Object* pObject);
 
 private:
@@ -78,9 +62,9 @@ private:
     sf::View Camera;
 
     // Tilemap stuff
-    sf::RenderStates States[2];
-    sf::VertexArray Map[2];
-    Grid<Object> MapObjects;
+    sf::RenderStates States;
+    sf::VertexArray Map;
+    std::map<uint64, Object> MapObjects;
     uint16 MapIter;
 };
 

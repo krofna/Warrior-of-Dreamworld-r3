@@ -40,7 +40,7 @@ Vector2<uint16> Object::GetPosition() const
     return Pos;
 }
 
-ObjectContainer* Object::GetContainer()
+ObjectContainer* Object::GetContainer() const
 {
     return pContainer;
 }

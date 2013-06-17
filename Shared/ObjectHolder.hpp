@@ -56,7 +56,7 @@ template <class T> void ObjectHolder<T>::Insert(T* pObject)
 
 template <class T> void ObjectHolder<T>::Erase(T* pObject)
 {
-    pObject->GetContainer()->Remove(pObject->GetPosition());
+    pObject->GetContainer()->Remove(pObject);
     ObjectMap.erase(pObject->GetGUID());
 }
 

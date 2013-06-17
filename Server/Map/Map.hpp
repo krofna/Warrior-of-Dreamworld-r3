@@ -18,20 +18,19 @@
 #ifndef MAP_HPP
 #define MAP_HPP
 
-#include <boost/bind.hpp>
 #include "WorldObject.hpp"
 #include "ObjectContainer.hpp"
+#include "Shared/Grid.hpp"
 
 class Map : public ObjectContainer
 {
 public:
+    Map();
+
     struct Factory
     {
-        public:
         Map* Load(QueryResult Result);
     };
-public:
-    Map();
     
     // Updates map. Called on every server thick
     virtual void Update(uint32 diff);
@@ -41,13 +40,31 @@ public:
     
     // Actually sends packets to pSession
     virtual void SendUpdate(WorldSession* pSession);
+    
+    // Returns WorldObject at Pos
+    virtual Object* At(Vector2<uint16> Pos);
+    
+    // Inserts object into map
+    virtual void Insert(Object* pObject);
 
-    // TODO: ??
-    uint64 GetGUID() { return m_GUID; }
-protected:
+    // Removes object from map
+    virtual void Remove(Object* pObject);
+
+    uint64 GetGUID() { return GUID; }
+
+private:
     // Packets enqueued by EnqueuePlayerUpdate and sent in SendUpdate
     std::vector<WorldPacket> PacketsForPlayers;
-    uint64 m_GUID;
+    
+    class Cell
+    {
+        std::list<WorldObject*> Objects;
+    };
+    
+    Grid<Cell> CollisionGrid;
+
+    // Map GUID
+    uint64 GUID;
 };
 
 #endif

@@ -40,6 +40,7 @@ public:
     void HandleNULL();
     void HandlePubkeyOpcode();
     void HandleLoginOpcode();
+    void HandleCreateMapOpcode();
     void HandleAddObjectOpcode();
     void HandleRemoveObjectOpcode();
     void HandleRelocateObjectOpcode();
@@ -52,7 +53,7 @@ private:
     void HandleReceive(const boost::system::error_code& Error);
     void HandleHeader(const boost::system::error_code& Error);
 
-    WorldPacket Packet;
+    WorldPacket RecPckt;
     TCPSocket Socket;
     TCPResolver Resolver;
     std::queue<WorldPacket> MessageQueue;

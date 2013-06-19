@@ -20,7 +20,7 @@
 
 #include "Shared/Grid.hpp"
 #include "Shared/Singleton.hpp"
-#include "Shared/Vector2.hpp"
+#include "NodeQueue.hpp"
 
 #include <queue>
 #include <mutex>
@@ -40,21 +40,11 @@ public:
     void ProcessAll();
     void GeneratePath();
 
-    struct Node
-    {
-        void Reset();
-
-        Vector2<uint16> Position;
-        Node* pParent;
-        uint16 Cost;
-        uint16 Color;
-    };
-
 private:
     Pathfinder();
 
     void ResetPathfinderGrid();
-    void Relax(Node* pFirst, Node* pSecond, uint16 Cost, std::priority_queue<Node*>& OpenList);
+    void Relax(Node* pFirst, Node* pSecond, uint16 Cost);
 
     struct Work
     {
@@ -73,6 +63,7 @@ private:
     */
     uint16 WHITE, GRAY, BLACK;
     Grid<Node> PathfinderGrid;
+    NodeQueue OpenList;
 };
 
 #endif

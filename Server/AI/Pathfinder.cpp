@@ -22,7 +22,6 @@
 #include "Shared/Log.hpp"
 
 #include <stack>
-#include <limits>
 
 const int MAX_MAP_HEIGHT = std::numeric_limits<uint16>::max();
 const int MAX_MAP_WIDTH = std::numeric_limits<uint16>::max();
@@ -94,7 +93,7 @@ void Pathfinder::ProcessAll()
     }
 }
 
-void Pathfinder::Relax(Node* pFirst, Node* pSecond, uint16 Cost, std::priority_queue<Node*>& OpenList)
+void Pathfinder::Relax(Node* pFirst, Node* pSecond, uint16 Cost)
 {
     // Collision check
     Map* pMap = pWork->pMe->GetContainer()->ToMap();
@@ -109,11 +108,11 @@ void Pathfinder::Relax(Node* pFirst, Node* pSecond, uint16 Cost, std::priority_q
         if (pSecond->Color < GRAY) // < GRAY means WHITE
         {
             pSecond->Color = GRAY;
-            OpenList.push(pSecond);
+            OpenList.Insert(pSecond);
         }
         else if (pSecond->Color == GRAY)
         {
-            //OpenList.decrease_key(pSecond);
+            OpenList.DecreaseKey(pSecond->i);
         }
     }
 }
@@ -136,13 +135,12 @@ void Pathfinder::GeneratePath()
     pCurrent->Color = GRAY;
     pCurrent->Cost = 0;
 
-    std::priority_queue<Node*> OpenList;
-    OpenList.push(pCurrent);
+    OpenList.Clear();
+    OpenList.Insert(pCurrent);
 
-    while (!OpenList.empty())
+    while (!OpenList.Empty())
     {
-        pCurrent = OpenList.top();
-        OpenList.pop();
+        pCurrent = OpenList.ExtractMin();
 
         if (pCurrent->Position == pWork->Target)
         {
@@ -161,28 +159,28 @@ void Pathfinder::GeneratePath()
 
         // Right
         if (pCurrent->Position.x < SizeX-1)
-            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y, pCurrent->Position.x+1), 10, OpenList);
+            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y, pCurrent->Position.x+1), 10);
         // Low
         if (pCurrent->Position.y < SizeY-1)
-            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y+1, pCurrent->Position.x), 10, OpenList);
+            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y+1, pCurrent->Position.x), 10);
         // Right-low
         if (pCurrent->Position.x < SizeX-1 && pCurrent->Position.y < SizeY-1)
-            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y+1, pCurrent->Position.x+1), 14, OpenList);
+            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y+1, pCurrent->Position.x+1), 14);
         // Left
         if (pCurrent->Position.x > 0)
-            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y, pCurrent->Position.x-1), 10, OpenList);
+            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y, pCurrent->Position.x-1), 10);
         // High
         if (pCurrent->Position.y > 0)
-            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y-1, pCurrent->Position.x), 10, OpenList);
+            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y-1, pCurrent->Position.x), 10);
         // Left-high
         if (pCurrent->Position.x > 0 && pCurrent->Position.y > 0)
-            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y-1, pCurrent->Position.x-1), 14, OpenList);
+            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y-1, pCurrent->Position.x-1), 14);
         // Left-low
         if (pCurrent->Position.x > 0 && pCurrent->Position.y < SizeY-1)
-            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y+1, pCurrent->Position.x-1), 14, OpenList);
+            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y+1, pCurrent->Position.x-1), 14);
         // Right-high
         if (pCurrent->Position.x < SizeX-1 && pCurrent->Position.y > 0)
-            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y-1, pCurrent->Position.x+1), 14, OpenList);
+            Relax(pCurrent, PathfinderGrid.At(pCurrent->Position.y-1, pCurrent->Position.x+1), 14);
         
         pCurrent->Color = BLACK;
     }
@@ -190,11 +188,4 @@ void Pathfinder::GeneratePath()
     delete pPath;
     sLog.Write(LEVEL_WARNING, FILTER_PATHFINDING, "Could not generate path from (%u, %u) to (%u, %u) for unit %u!",
                pWork->Origin.x, pWork->Origin.y, pWork->Target.x, pWork->Target.y, pWork->pMe->GetName());
-}
-
-void Pathfinder::Node::Reset()
-{
-    Cost = std::numeric_limits<uint16>::max();
-    pParent = nullptr;
-    Color = 0;
 }

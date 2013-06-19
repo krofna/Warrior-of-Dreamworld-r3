@@ -49,7 +49,7 @@ void NodeQueue::Insert(Node* pNode)
 
 void NodeQueue::DecreaseKey(size_t i)
 {
-    while (i > 0 && A[Parent(i)] > A[i])
+    while (i > 0 && A[Parent(i)]->Cost > A[i]->Cost)
     {
         std::swap(A[Parent(i)]->i, A[i]->i);
         std::swap(A[Parent(i)], A[i]);

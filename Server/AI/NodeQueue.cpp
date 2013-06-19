@@ -62,11 +62,12 @@ Node* NodeQueue::ExtractMin()
     if (Size == 0)
         return nullptr;
 
+    Node* Min = A[0];
     A[0] = A[--Size];
     A[0]->i = 0;
     Heapify(0);
 
-    return A[0];
+    return Min;
 }
 
 void NodeQueue::Heapify(size_t i)

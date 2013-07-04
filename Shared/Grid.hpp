@@ -73,7 +73,7 @@ template <class T>
 void Grid<T>::Allocate(uint16 x, uint16 y)
 {
     Resize(x, y);
-    for (uint16 i = 0; i < x * y; ++i)
+    for (uint32 i = 0; i < uint32(x) * uint32(y); ++i)
         Array[i] = new T;
 }
 

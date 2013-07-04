@@ -48,7 +48,7 @@ private:
 
     struct Work
     {
-        Unit* pMe;
+        Unit* pMe; // Unneeded? pMotionMaster->pMe
         MotionMaster* pMotionMaster;
         Vector2<uint16> Origin;
         Vector2<uint16> Target;
@@ -61,7 +61,7 @@ private:
      * OLDWHITE  OLDGRAY   OLDBLACK  <-- WHITE |GRAY  BLACK ...
      * 0,        1,        2,        <-- WHITE |3,    4,    ...
     */
-    uint16 WHITE, GRAY, BLACK;
+    uint16 GRAY, BLACK;
     Grid<Node> PathfinderGrid;
     NodeQueue OpenList;
 };

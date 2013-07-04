@@ -23,8 +23,11 @@
 
 #include <stack>
 
-const int MAX_MAP_HEIGHT = std::numeric_limits<uint16>::max();
-const int MAX_MAP_WIDTH = std::numeric_limits<uint16>::max();
+// TODO: Modify below code to work with PERFECTION_LEVEL
+// For now it doesnt matter as there are no creatures yet
+const int PERFECTION_LEVEL = 32; // Decrease for more "perfect" pathfinding (uses more RAM)
+const int MAX_MAP_HEIGHT = std::numeric_limits<uint16>::max() / PERFECTION_LEVEL;
+const int MAX_MAP_WIDTH = std::numeric_limits<uint16>::max() / PERFECTION_LEVEL;
 
 void Pathfinder::Initialize()
 {
@@ -32,7 +35,6 @@ void Pathfinder::Initialize()
 }
 
 Pathfinder::Pathfinder( ) :
-WHITE                 (0),
 GRAY                  (1),
 BLACK                 (2)
 {
@@ -42,6 +44,7 @@ BLACK                 (2)
     {
         for (uint16 x = 0 ; x < MAX_MAP_WIDTH ; ++x)
         {
+            PathfinderGrid.At(x, y)->Reset();
             PathfinderGrid.At(x, y)->Position.x = x;
             PathfinderGrid.At(x, y)->Position.y = y;
         }
@@ -125,7 +128,7 @@ void Pathfinder::GeneratePath()
     uint16 SizeX = pMap->GetSize().x * 32;
     uint16 SizeY = pMap->GetSize().y * 32;
 
-    if (BLACK > 0xFFFA)
+    if (GRAY == 0xFFFF)
         ResetPathfinderGrid();
 
     GRAY += 2;

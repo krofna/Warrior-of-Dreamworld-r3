@@ -129,6 +129,7 @@ void TileMap::Draw()
         }
     }
     Window::GetInstance()->draw(Map, States);
+    //std::for_each(MapObjects.begin(), MapObjects.end(), bind...
 }
 
 void TileMap::RemoveObject(uint64 GUID)

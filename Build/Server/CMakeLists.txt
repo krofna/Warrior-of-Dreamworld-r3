@@ -3,10 +3,12 @@ set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/Modules)
 
 include(FindThreads)
 
-FIND_PACKAGE(Boost COMPONENTS system chrono REQUIRED)
+FIND_PACKAGE(Boost COMPONENTS system REQUIRED)
 FIND_PACKAGE(MySQLConnectorCPP)
 FIND_PACKAGE(CryptoPP)
 FIND_PACKAGE(Threads)
+
+add_definitions(-DBOOST_CHRONO_HEADER_ONLY)
 
 link_directories(${Boost_LIBRARY_DIRS})
 

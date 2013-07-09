@@ -17,6 +17,8 @@
 */
 #include "ObjectMgr.hpp"
 
+#include <stdexcept>
+
 ObjectMgr::ObjectMgr()
 {
 
@@ -33,6 +35,7 @@ sf::Texture* ObjectMgr::GetTileset(std::string const& Filename)
         m_Textures[Filename] = pTexture;
     else
     {
+        // RYAN: throw or return? Pick!
         throw std::runtime_error("Failed to load " + Filename);
         return nullptr;
     }
